@@ -14,6 +14,6 @@ class Dashboards_Controller extends Base_Controller {
             'test'  => 'Prueba de Jorge'
         );
 
-        $this->view('dashboards/index', $data);
+        $this->load->view('dashboards/index', $data);
     }
 }

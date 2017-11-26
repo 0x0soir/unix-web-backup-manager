@@ -1,7 +1,7 @@
 <?php
 defined('BASE_PATH') OR exit('No direct script access allowed');
 
-class Loader_Controller {
+class Init {
 
     function __construct()
     {
