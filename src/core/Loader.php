@@ -7,13 +7,20 @@ class Loader {
     {
     }
 
-    function view($view, $data)
+    function view($view, $data = array())
     {
         foreach ($data as $id_assoc => $value)
         {
             ${$id_assoc} = $value;
         }
 
+        $this->load = $this;
+
         require_once(BASE_PATH.'/views/'.$view.'.php');
+    }
+
+    function redirect($url = '')
+    {
+        header('Location: /'.$url);
     }
 }

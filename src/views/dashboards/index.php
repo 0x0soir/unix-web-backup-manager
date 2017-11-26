@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Index view</title>
-</head>
-<body>
-
-<h1>Prueba</h1>
-<p><?= $test ?> <?= prueba() ?></p>
-
-</body>
-</html>
+<?php
+$this->load->view('_/header');
+?>
+    <body>
+        <main role="main" class="container">
+            Prueba
+        </main>
+    </body>
+<?php
+$this->load->view('_/footer', array());
+?>
