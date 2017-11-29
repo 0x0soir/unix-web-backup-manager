@@ -5,16 +5,25 @@ class Init {
 
     function __construct()
     {
-        $this->load_helpers();
+        $this->_load_helpers();
     }
 
     function initialize()
     {
-        $controller_obj = $this->load_controller();
-        $this->load_action($controller_obj);
+        if (isset($_GET['params']))
+        {
+            $params = explode( "/", $_GET['params']);
+
+            $controller = $params[0];
+
+            $action = $params[1];
+        }
+
+        $controller_obj = $this->_load_controller(isset($controller) ? $controller : BASE_CONTROLLER);
+        $this->_load_action($controller_obj, isset($action) ? $action : BASE_ACTION);
     }
 
-    function load_helpers($helpers = array())
+    private function _load_helpers($helpers = array())
     {
         foreach (glob(BASE_PATH.'/helpers/*.php') as $helper)
         {
@@ -22,20 +31,27 @@ class Init {
         }
     }
 
-    function load_controller($controller = BASE_CONTROLLER)
+    private function _load_controller($controller_var)
     {
-        $controller = ucwords($controller).'_Controller';
+        $controller = ucwords($controller_var).'_Controller';
 
         $controller_file = $controller.'.php';
 
-        require_once(BASE_PATH.'/controllers/'.$controller_file);
+        if (file_exists(BASE_PATH.'/controllers/'.$controller_file) && ctype_alpha($controller_var))
+        {
+            require_once(BASE_PATH.'/controllers/'.$controller_file);
 
-        $controller_obj = new $controller();
+            $controller_obj = new $controller();
+        }
+        else
+        {
+            exit;
+        }
 
         return $controller_obj;
     }
 
-    function load_action($controller_obj, $action = BASE_ACTION)
+    private function _load_action($controller_obj, $action = BASE_ACTION)
     {
         if(isset($action) && method_exists($controller_obj, $action))
         {

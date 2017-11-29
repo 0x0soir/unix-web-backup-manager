@@ -6,6 +6,6 @@ require_once('../core/Base_Controller.php');
 
 $loader_obj = new Init();
 
-$loaded_controller = $loader_obj->initialize();
+$loader_obj->initialize();
 
 ?>
