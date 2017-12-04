@@ -19,7 +19,7 @@ class Dashboards_Controller extends Base_Controller {
 
     public function login()
     {
-        print_r($this->load->get_value());
-        $this->load->view('common/login', array());
+        //print_r($this->load->get_value());
+        $this->load->view('login2', array());
     }
 }
