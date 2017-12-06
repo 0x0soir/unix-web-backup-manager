@@ -9,17 +9,28 @@ class Base_Controller {
         $this->auth = load_class('Auth', 'core');
         load_class('ActiveRecord', 'core', TRUE);
         load_active_record();
+        load_config();
 
-        $this->initialize();
+        $this->_initialize();
     }
 
-    private function initialize()
+    private function _initialize()
     {
-        if ( ! $this->auth->is_logged() )
+        if ( ( ! $this->auth->is_logged() ) && (! $this->_check_public_url()) )
         {
-            // $this->load->view('common/login');
-            // exit;
+            $this->load->redirect('user/index');
         }
+    }
+
+    private function _check_public_url()
+    {
+        $actual_uri = explode('/', $_SERVER['REQUEST_URI']);
+        if (count($actual_uri)>2)
+        {
+            return in_array('/'.$actual_uri[1].'/'.$actual_uri[2], config_public_urls);
+        }
+
+        return FALSE;
     }
 
 }
