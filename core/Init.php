@@ -45,6 +45,7 @@ class Init {
         }
         else
         {
+            require(BASE_PATH.'/views/404.php');
             exit;
         }
 
