@@ -15,6 +15,11 @@ function load_class($class, $directory, $mode = FALSE)
     }
 }
 
+function load_config()
+{
+    require_once(BASE_PATH.'/config/config.php');
+}
+
 function load_active_record()
 {
     ActiveRecord\Config::initialize(function($cfg)

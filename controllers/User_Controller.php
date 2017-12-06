@@ -10,10 +10,19 @@ class User_Controller extends Base_Controller {
 
     public function index()
     {
+        $this->load->view('login', array());
+    }
+
+    public function login()
+    {
+        $username = $this->load->post_value('username');
+        $pasword = $this->load->post_value('password');
+
         $data = array(
-            'test'  => 'Prueba de Jorge'
+            'loggin_status' => $this->auth->check_user_password($username, $pasword)
         );
 
-        $this->load->view('dashboards/index', $data);
+        echo json_encode($data);
+        exit;
     }
 }

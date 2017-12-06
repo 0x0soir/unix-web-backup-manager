@@ -5,6 +5,7 @@ CREATE TABLE users(
   username varchar(50),
   email varchar(64),
   password char(60),
+  session char(60),
   created_at datetime,
   updated_at datetime
 );

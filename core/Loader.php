@@ -30,6 +30,12 @@ class Loader {
         return $this->_get_value_array($params, $index);
     }
 
+    function post_value($index = NULL)
+    {
+        $params = $_POST;
+        return $this->_get_value_array($params, $index);
+    }
+
     private function _get_value_array($array, $index = NULL)
     {
 		// If $index is NULL, it means that the whole $array is requested

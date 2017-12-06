@@ -7,8 +7,66 @@ class Auth {
     {
     }
 
+    function check_user_password($username, $password)
+    {
+        if (($username == NULL)||($password == NULL)){
+            return FALSE;
+        }
+
+        $test = User::find_by_username($username, array('include' => array('user_logs')));
+
+        if (count($test) > 0)
+        {
+            $this->loggin($test);
+            return password_verify($password, $test->password);
+        }
+
+        return FALSE;
+    }
+
+    function loggin($user_model)
+    {
+        $ip = 0;
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        $hash_options = [
+            'cost' => 12,
+        ];
+
+        $hash_session = password_hash($user_model->id, PASSWORD_BCRYPT, $hash_options);
+
+        // Update session
+        $user_model->session = $hash_session;
+        $user_model->save();
+
+        // Create cookie
+        setcookie('lg_id', $hash_session, time() + 60*60*24*365, '/');
+
+        // Create log data
+        $user_model->create_user_logs(array('history' => 'Loggin: '.$hash_session.'', 'ip' => $ip));
+    }
+
     function is_logged()
     {
+        if (isset($_COOKIE["lg_id"]))
+        {
+            $user = User::find_by_session($_COOKIE["lg_id"]);
+
+            if (count($user) > 0)
+            {
+                if (password_verify($user->id, $user->session))
+                {
+                    return TRUE;
+                }
+            }
+        }
+
         return FALSE;
     }
 }
