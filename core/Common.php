@@ -23,7 +23,19 @@ function load_active_record()
         $cfg->set_connections(array('development' => 'mysql://root:root@localhost/tfg_admin'));
     });
 
-    // create some people
-    $jax = new User(array('username' => 'Jorge', 'password' => '1234'));
-    $jax->save();
+    if (count(User::find_all_by_username('admin'))==0)
+    {
+        $opciones = [
+            'cost' => 12,
+        ];
+
+        $jax = new User(
+            array(
+                'username' => 'admin',
+                'email' => 'admin@tfg.com',
+                'password' => password_hash("rasmuslerdorf", PASSWORD_BCRYPT, $opciones)
+            )
+        );
+        $jax->save();
+    }
 }
