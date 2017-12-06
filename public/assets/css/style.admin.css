@@ -5,7 +5,20 @@ body {
     font-family: 'Roboto';
 }
 
+.loader {
+    margin: 0 auto;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #60c84c;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 /* LOGIN */
 .section_login {
@@ -19,8 +32,12 @@ body {
     margin-top: 5px;
 }
 
-.section_login .login-form {
+.section_login .login-form-green {
     border: 1px solid rgba(96,200,76,0.3);
+}
+
+.section_login .login-form-red {
+    border: 1px solid rgba(181,48,45,0.3);
 }
 
 /* 404 */
