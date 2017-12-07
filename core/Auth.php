@@ -39,7 +39,7 @@ class Auth {
         }
 
         $hash_options = [
-            'cost' => 12,
+            'cost' => 6,
         ];
 
         $hash_session = password_hash($user_model->id, PASSWORD_BCRYPT, $hash_options);
