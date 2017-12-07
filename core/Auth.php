@@ -17,8 +17,11 @@ class Auth {
 
         if (count($test) > 0)
         {
-            $this->loggin($test);
-            return password_verify($password, $test->password);
+            if (password_verify($password, $test->password))
+            {
+                $this->loggin($test);
+                return TRUE;
+            }
         }
 
         return FALSE;

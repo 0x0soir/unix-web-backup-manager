@@ -3,7 +3,7 @@ $this->load->view('_/header');
 ?>
     <body>
         <main role="main" class="container">
-            Prueba
+            <?= $test ?>
         </main>
     </body>
 <?php
