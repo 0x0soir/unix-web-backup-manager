@@ -13,13 +13,13 @@ class Auth {
             return FALSE;
         }
 
-        $test = User::find_by_username($username, array('include' => array('user_logs')));
+        $user_obj = User::find_by_username($username, array('include' => array('user_logs')));
 
-        if (count($test) > 0)
+        if (count($user_obj) > 0)
         {
-            if (password_verify($password, $test->password))
+            if (password_verify($password, $user_obj->password))
             {
-                $this->loggin($test);
+                $this->loggin($user_obj);
                 return TRUE;
             }
         }
