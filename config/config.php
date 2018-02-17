@@ -6,3 +6,5 @@ define('config_public_urls', array(
         '/user/login',
     )
 );
+
+define('login_success_url', "/".BASE_CONTROLLER."/".BASE_ACTION);

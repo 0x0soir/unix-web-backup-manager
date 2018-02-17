@@ -19,7 +19,8 @@ class User_Controller extends Base_Controller {
         $pasword = $this->load->post_value('password');
 
         $data = array(
-            'loggin_status' => $this->auth->check_user_password($username, $pasword)
+            'loggin_status' => $this->auth->check_user_password($username, $pasword),
+            'url'           => login_success_url
         );
 
         echo json_encode($data);

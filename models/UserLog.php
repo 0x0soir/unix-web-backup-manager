@@ -6,7 +6,7 @@ class UserLog extends ActiveRecord\Model
         array('user'),
     );
 
-    public function new_log($username, $log, $ip)
+    public static function new_log($username, $log, $ip)
     {
         $user = User::find_by_username($username);
         if (count($user) > 0)

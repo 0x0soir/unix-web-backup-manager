@@ -25,7 +25,7 @@
                     });
                 } else {
                     swal('¡Bien!', 'Has iniciado sesión correctamente.', 'success').then((value) => {
-                        window.location = "/caca";
+                        window.location = data_json.url;
                     });
                 }
             }
