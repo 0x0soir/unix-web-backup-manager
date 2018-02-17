@@ -38,10 +38,8 @@ class Loader {
 
     private function _get_value_array($array, $index = NULL)
     {
-		// If $index is NULL, it means that the whole $array is requested
 		isset($index) OR $index = array_keys($array);
 
-		// allow fetching multiple keys at once
 		if (is_array($index))
 		{
 			$output = array();
@@ -57,13 +55,13 @@ class Loader {
 		{
 			$value = $array[$index];
 		}
-		elseif (($count = preg_match_all('/(?:^[^\[]+)|\[[^]]*\]/', $index, $matches)) > 1) // Does the index contain array notation
+		elseif (($count = preg_match_all('/(?:^[^\[]+)|\[[^]]*\]/', $index, $matches)) > 1)
 		{
 			$value = $array;
 			for ($i = 0; $i < $count; $i++)
 			{
 				$key = trim($matches[0][$i], '[]');
-				if ($key === '') // Empty notation will return the value as array
+				if ($key === '')
 				{
 					break;
 				}

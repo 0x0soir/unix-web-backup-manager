@@ -31,7 +31,7 @@ function load_active_record()
     if (count(User::find_all_by_username('admin'))==0)
     {
         $opciones = [
-            'cost' => 12,
+            'cost' => 6,
         ];
 
         $jax = new User(
