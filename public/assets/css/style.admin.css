@@ -142,54 +142,106 @@ a, a:hover {
     border-color: #b5302d;
 }
 
-/* WEBSITE CONTENT */
+/*
+ * Website content
+ */
 .full-container {
     height: 100%;
     overflow: hidden;
     width: 100%;
 }
 
-.bar {
-    background: #ffffff;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 10;
+.icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .form-control {
+    padding: .75rem 1rem;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+.form-control-dark:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
 .logo {
-    color: #2a323c !important;
+    color: #ccc !important;
     font-size: 20px;
     font-weight: 700;
     letter-spacing: .03em;
-    line-height: 70px;
+    line-height: 20px;
 }
 
 .logo-red {
     color: #b5302d !important;
 }
 
-.bar > .left {
-    background-color: #ffffff;
-    float: left;
-    height: 60px;
-    position: relative;
-    width: 240px;
-    z-index: 1;
+/*
+ * Left sidebar menu
+ */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    min-height: 100%;
 }
 
-.navbar-light {
-    background-color: #2a323c;
-    border-radius: 0px;
-    border: none;
-    margin-bottom: 0px;
+.sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px; /* Height of navbar */
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
 
-.navbar-light .navbar-text a {
-    color: #ffffff !important;
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
 }
 
-.navbar-light .navbar-text .dropdown-menu a {
-    color: #000 !important;
+.sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+}
+
+.sidebar .nav-link.active {
+    color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+    color: inherit;
+}
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
 }
