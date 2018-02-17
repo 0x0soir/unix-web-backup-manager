@@ -52,7 +52,7 @@ class Auth {
         setcookie('lg_id', $hash_session, time() + 60*60*24*365, '/');
 
         // Create log data
-        $user_model->create_user_logs(array('history' => 'Loggin: '.$hash_session.'', 'ip' => $ip));
+        UserLog::new_log($user_model->username, 'Login: '.$hash_session, $ip);
     }
 
     function is_logged()
