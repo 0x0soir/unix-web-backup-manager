@@ -2,12 +2,6 @@
 defined('BASE_PATH') OR exit('No direct script access allowed');
 
 class Init {
-
-    function __construct()
-    {
-        $this->_load_helpers();
-    }
-
     function initialize()
     {
         if (isset($_GET['params']))
@@ -21,14 +15,6 @@ class Init {
 
         $controller_obj = $this->_load_controller(isset($controller) ? $controller : BASE_CONTROLLER);
         $this->_load_action($controller_obj, isset($action) ? $action : BASE_ACTION);
-    }
-
-    private function _load_helpers($helpers = array())
-    {
-        foreach (glob(BASE_PATH.'/helpers/*.php') as $helper)
-        {
-            include_once($helper);
-        }
     }
 
     private function _load_controller($controller_var)

@@ -7,8 +7,13 @@
 
         <title>TFG Admin</title>
 
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
+
         <!-- Bootstrap core CSS -->
         <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom -->
         <link href="/assets/css/style.admin.css" rel="stylesheet">
-        <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
     </head>

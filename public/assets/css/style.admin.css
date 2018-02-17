@@ -1,8 +1,10 @@
 /* FONTS */
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,60');
-
 body {
-    font-family: 'Roboto';
+    font-family: 'Lato', sans-serif;
+}
+
+a, a:hover {
+    text-decoration: none;
 }
 
 .loader {
@@ -138,4 +140,56 @@ body {
     background-color: #b5302d;
     background-image: none;
     border-color: #b5302d;
+}
+
+/* WEBSITE CONTENT */
+.full-container {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+
+.bar {
+    background: #ffffff;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    color: #2a323c !important;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    line-height: 70px;
+}
+
+.logo-red {
+    color: #b5302d !important;
+}
+
+.bar > .left {
+    background-color: #ffffff;
+    float: left;
+    height: 60px;
+    position: relative;
+    width: 240px;
+    z-index: 1;
+}
+
+.navbar-light {
+    background-color: #2a323c;
+    border-radius: 0px;
+    border: none;
+    margin-bottom: 0px;
+}
+
+.navbar-light .navbar-text a {
+    color: #ffffff !important;
+}
+
+.navbar-light .navbar-text .dropdown-menu a {
+    color: #000 !important;
 }

@@ -11,7 +11,17 @@ class Base_Controller {
         load_active_record();
         load_config();
 
+        $this->_load_helpers();
+
         $this->_initialize();
+    }
+
+    private function _load_helpers($helpers = array())
+    {
+        foreach (glob(BASE_PATH.'/helpers/*.php') as $helper)
+        {
+            include_once($helper);
+        }
     }
 
     private function _initialize()
