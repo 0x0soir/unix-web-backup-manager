@@ -1,28 +1,56 @@
+<?php
+$menu = array(
+    array(
+        'id' => 'dashboards_index',
+        'url' => '/Dashboards/index',
+        'icon' => 'home',
+        'label' => 'Inicio'
+    ),
+    array(
+        'id' => 'backups_index',
+        'url' => '/Backups/index',
+        'icon' => 'layers',
+        'label' => 'Backups'
+    )
+);
+
+$admin_menu = array(
+    array(
+        'id' => 'users_users',
+        'url' => '/Users/users',
+        'icon' => 'users',
+        'label' => 'Usuarios'
+    )
+);
+?>
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    Inicio
-                </a>
-            </li>
-            <?php if(check_perm('ADMIN')): ?>
+            <?php foreach ($menu as $menu_item): ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Usuarios
+                    <a class="nav-link <?= ! empty($menu_active) && $menu_active == $menu_item['id'] ? 'active' : '' ?>" href="<?= $menu_item['url'] ?>">
+                        <span data-feather="<?= $menu_item['icon'] ?>"></span>
+                        <?= $menu_item['label'] ?>
                     </a>
                 </li>
-            <?php endif; ?>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                    Backups
-                </a>
-            </li>
+            <?php endforeach; ?>
         </ul>
 
+        <?php if(check_perm('ADMIN')): ?>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Administración</span>
+            </h6>
+            <ul class="nav flex-column mb-2">
+                <?php foreach ($admin_menu as $menu_item): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= ! empty($menu_active) && $menu_active == $menu_item['id'] ? 'active' : '' ?>" href="<?= $menu_item['url'] ?>">
+                            <span data-feather="<?= $menu_item['icon'] ?>"></span>
+                            <?= $menu_item['label'] ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Últimos backups</span>
             <a class="d-flex align-items-center text-muted" href="#">

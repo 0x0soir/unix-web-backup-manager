@@ -1,7 +1,7 @@
 <?php
 defined('BASE_PATH') OR exit('No direct script access allowed');
 
-class User_Controller extends Base_Controller {
+class Users_Controller extends Base_Controller {
 
     public function __construct()
     {
@@ -25,5 +25,14 @@ class User_Controller extends Base_Controller {
 
         echo json_encode($data);
         exit;
+    }
+
+    public function users()
+    {
+        $data = array();
+
+        $data['users'] = User::all();
+
+        $this->load->view('users/users', $data);
     }
 }

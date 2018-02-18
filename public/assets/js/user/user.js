@@ -1,7 +1,7 @@
 ;$(document).ready(function() {
 
     $('#login_form').on('submit', function(event){
-        var url = "/user/login";
+        var url = "/users/login";
         event.preventDefault();
 
         $('#login_form').fadeOut('slow');

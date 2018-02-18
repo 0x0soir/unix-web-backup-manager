@@ -28,7 +28,7 @@ class Base_Controller {
     {
         if ( ( ! $this->auth->is_logged() ) && (! $this->_check_public_url()) )
         {
-            $this->load->redirect('user/index');
+            $this->load->redirect('users/index');
         }
     }
 

@@ -1,12 +1,9 @@
 <?php
-$this->load->view('_/header');
+$this->load->view('_/header', array(
+    'menu_active' => 'dashboards_index'
+));
 ?>
-    <body>
-        <div class="full-container">
-            <?php $this->load->view('_/bar'); ?>
-            <?php $this->load->view('_/left'); ?>
-        </div>
-    </body>
+    Prueba
 <?php
 $this->load->view('_/footer', array());
 ?>

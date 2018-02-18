@@ -3,7 +3,7 @@
 class UserLog extends ActiveRecord\Model
 {
     static $belongs_to = array(
-        array('users'),
+        array('user'),
     );
 
     public static function new_log($username, $log, $ip)

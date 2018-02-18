@@ -151,10 +151,14 @@ a, a:hover {
     width: 100%;
 }
 
-.icon {
+.feather {
     width: 16px;
     height: 16px;
     vertical-align: text-bottom;
+}
+
+.btn {
+    border-radius: 0.2rem;
 }
 
 /*

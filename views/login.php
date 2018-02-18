@@ -1,5 +1,5 @@
 <?php
-$this->load->view('_/header');
+$this->load->view('_/header', array('NOT_INCLUDES' => TRUE));
 ?>
     <body class="section_login">
         <div class="container-fluid">
@@ -24,6 +24,7 @@ $this->load->view('_/header');
     </body>
 <?php
 $this->load->view('_/footer', array(
+        'NOT_INCLUDES' => TRUE,
         'user' => TRUE
     )
 );
