@@ -1,22 +1,50 @@
+SET foreign_key_checks = 0;
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
-  id int not null primary key auto_increment,
+  id int(11) not null primary key auto_increment,
   username varchar(50),
   email varchar(64),
   password char(60),
   session char(60),
-  created_at datetime,
-  updated_at datetime
-);
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS user_logs;
 
 CREATE TABLE user_logs(
   id int not null primary key auto_increment,
-  user_id int,
+  user_id int(11) NOT NULL,
   history varchar(200),
-  ip varchar(64),
-  created_at datetime,
-  updated_at datetime
-);
+  ip varchar(64) NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT `FK_pk_user_logs_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS user_perms;
+
+CREATE TABLE `user_perms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `definition` text,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS user_perm_to_users;
+
+CREATE TABLE `user_perm_to_users` (
+  `perm_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`perm_id`,`user_id`),
+  CONSTRAINT `FK_pk_user_perm_to_users_perm` FOREIGN KEY (`perm_id`) REFERENCES `user_perms` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `FK_pk_user_perm_to_users_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+SET foreign_key_checks = 1;

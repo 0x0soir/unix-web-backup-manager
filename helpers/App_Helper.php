@@ -35,3 +35,12 @@ function is_logged($return_user = FALSE)
 
     return FALSE;
 }
+
+function check_perm($permission)
+{
+    if ($user = is_logged(TRUE))
+    {
+        return User::check_permission($user->id, $permission);
+    }
+    return FALSE;
+}
