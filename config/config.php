@@ -7,4 +7,4 @@ define('config_public_urls', array(
     )
 );
 
-define('login_success_url', "/".BASE_CONTROLLER."/".BASE_ACTION);
+define('DEFAULT_URL', "/".BASE_CONTROLLER."/".BASE_ACTION);

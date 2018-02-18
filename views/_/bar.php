@@ -9,7 +9,8 @@
             <div class="dropdown-menu" aria-labelledby="userDropdownMenu" style="position: absolute; right: 0;margin-left: -100px;">
                 <a class="dropdown-item" href="#">Perfil</a>
                 <a class="dropdown-item" href="#">Ajustes</a>
-                <a class="dropdown-item" href="#">Cerrar sesión</a>
+                <hr>
+                <a class="dropdown-item" href="Users/logout"><span data-feather="log-out"></span> Cerrar sesión</a>
             </div>
         </li>
     </ul>

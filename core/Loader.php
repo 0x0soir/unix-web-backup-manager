@@ -19,8 +19,13 @@ class Loader {
         require_once(BASE_PATH.'/views/'.$view.'.php');
     }
 
-    function redirect($url = '')
+    function redirect($url = NULL)
     {
+        if ( ! $url)
+        {
+            $url = BASE_CONTROLLER."/".BASE_ACTION;
+        }
+        
         header('Location: /'.$url);
     }
 

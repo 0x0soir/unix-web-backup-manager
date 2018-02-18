@@ -5,11 +5,12 @@ class Base_Controller {
 
     function __construct()
     {
-        $this->load = load_class('Loader', 'core');
-        $this->auth = load_class('Auth', 'core');
         load_class('ActiveRecord', 'core', TRUE);
         load_active_record();
         load_config();
+
+        $this->load = load_class('Loader', 'core');
+        $this->auth = load_class('Auth', 'core');
 
         $this->_load_helpers();
 

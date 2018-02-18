@@ -20,10 +20,18 @@ class Users_Controller extends Base_Controller {
 
         $data = array(
             'loggin_status' => $this->auth->check_user_password($username, $pasword),
-            'url'           => login_success_url
+            'url'           => DEFAULT_URL
         );
 
         echo json_encode($data);
+        exit;
+    }
+
+    public function logout()
+    {
+        $this->auth->logout();
+
+        $this->load->redirect();
         exit;
     }
 
