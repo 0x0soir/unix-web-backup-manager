@@ -10,7 +10,7 @@ class Init {
 
             $controller = $params[0];
 
-            $action = $params[1];
+            $action = isset($params[1]) ? $params[1] : '';
         }
 
         $controller_obj = $this->_load_controller(isset($controller) ? $controller : BASE_CONTROLLER);
