@@ -10,7 +10,7 @@ a, a:hover {
 .loader {
     margin: 0 auto;
     border: 6px solid #f3f3f3;
-    border-top: 6px solid #60c84c;
+    border-top: 6px solid #b5302d;
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -24,22 +24,76 @@ a, a:hover {
 
 /* LOGIN */
 .section_login {
-    background-color: #60c84c;
+    background-color: #F6F6F6;
     overflow: hidden;
 }
 
 .section_login .row {
     height: 100%;
-    background: #202020;
     margin-top: 5px;
 }
 
-.section_login .login-form-green {
-    border: 1px solid rgba(96,200,76,0.3);
+.section_login .logo {
+    margin: 20px 0;
+    margin-bottom: 40px;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #666;
+    text-align: center;
 }
 
-.section_login .login-form-red {
-    border: 1px solid rgba(181,48,45,0.3);
+.section_login .card {
+    -webkit-box-shadow: 0 0 40px rgba(0,0,0,.05);
+    box-shadow: 0 0 40px rgba(0,0,0,.05);
+    background-color: #fff;
+    border-radius: 3px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.section_login .card .card-primary {
+    border-top: 2px solid #b5302d;
+}
+
+.section_login .card .card-header {
+    border-bottom-color: #f9f9f9;
+    line-height: 30px;
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
+    align-self: center;
+    background: transparent;
+    width: 100%;
+}
+
+.section_login .card .card-header h2 {
+    font-size: 0.9em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 2px 0 -2px 0;
+    line-height: 30px;
+}
+
+.section_login .btn-primary {
+    background-color: #b5302d;
+    border-color: transparent !important;
+}
+
+.section_login .btn-primary:focus, .section_login .btn-primary:focus:active, .section_login .btn-primary:active, .section_login .btn-primary:hover {
+	background-color: #c9253d !important;
+}
+
+.section_login .form-control {
+	border: 1px solid #ededed;
+    -webkit-box-shadow: none;
+	        box-shadow: none;
+	outline: none;
+}
+
+.section_login .form-control:focus {
+	border-color: #574B90;
 }
 
 /* 404 */

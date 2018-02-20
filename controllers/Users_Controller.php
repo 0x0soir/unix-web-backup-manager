@@ -17,7 +17,7 @@ class Users_Controller extends Base_Controller {
     {
         $username = $this->load->post_value('username');
         $pasword = $this->load->post_value('password');
-
+        sleep(1);
         $data = array(
             'loggin_status' => $this->auth->check_user_password($username, $pasword),
             'url'           => DEFAULT_URL

@@ -16,8 +16,8 @@ $this->load->view('_/header', array(
                         <th>Usuario</th>
                         <th>Correo</th>
                         <th>Última conexión</th>
-                        <th><span data-feather="file"></span> Backups realizados</th>
-                        <th><span data-feather="command"></span> Backups programados</th>
+                        <th class="text-center"><span data-feather="file"></span> Backups realizados</th>
+                        <th class="text-center"><span data-feather="command"></span> Backups programados</th>
                         <th class="text-right">Opciones</th>
                     </tr>
                 </thead>
@@ -28,8 +28,8 @@ $this->load->view('_/header', array(
                             <td><?= $user->username ?></td>
                             <td><?= $user->email ?></td>
                             <td><?= $user->last_login ? $user->last_login : 'Nunca' ?></td>
-                            <td><span class="badge badge-success">0</span></td>
-                            <td><span class="badge badge-dark">0</span></td>
+                            <td align="center"><span class="badge badge-success">0</span></td>
+                            <td align="center"><span class="badge badge-dark">0</span></td>
                             <td align="right" class="p-0 pt-1">
                                 <button type="button" class="btn btn-primary btn-sm">Información</button>
                                 <button type="button" class="btn btn-danger btn-sm">Eliminar</button>

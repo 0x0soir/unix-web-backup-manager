@@ -10,7 +10,7 @@
                 <a class="dropdown-item" href="#">Perfil</a>
                 <a class="dropdown-item" href="#">Ajustes</a>
                 <hr>
-                <a class="dropdown-item" href="Users/logout"><span data-feather="log-out"></span> Cerrar sesión</a>
+                <a class="dropdown-item" href="/Users/logout"><span data-feather="log-out"></span> Cerrar sesión</a>
             </div>
         </li>
     </ul>
