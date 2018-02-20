@@ -1,14 +1,14 @@
 <?php
 defined('BASE_PATH') OR exit('No direct script access allowed');
 
-function get_actual_username()
+function get_actual_user()
 {
     if ($user = is_logged(TRUE))
     {
-        return $user->username;
+        return $user;
     }
 
-    return '?';
+    return NULL;
 }
 
 function is_logged($return_user = FALSE)

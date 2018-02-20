@@ -4,10 +4,10 @@
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap" style="position: relative;">
             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" id="userDropdownMenu" data-toggle="dropdown" >
-                <?= get_actual_username() ?>
+                <?= get_actual_user()->username ?>
             </button>
             <div class="dropdown-menu" aria-labelledby="userDropdownMenu" style="position: absolute; right: 0;margin-left: -100px;">
-                <a class="dropdown-item" href="#">Perfil</a>
+                <a class="dropdown-item" href="/Users/user/<?= get_actual_user()->id ?>">Perfil</a>
                 <a class="dropdown-item" href="#">Ajustes</a>
                 <hr>
                 <a class="dropdown-item" href="/Users/logout"><span data-feather="log-out"></span> Cerrar sesión</a>
