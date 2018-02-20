@@ -43,4 +43,23 @@ class Users_Controller extends Base_Controller {
 
         $this->load->view('users/users', $data);
     }
+
+    public function user($user_id)
+    {
+        $user = User::find_by_id($user_id);
+        if ($user)
+        {
+            $data = array();
+
+            $data['user_info'] = $user;
+            $data['user_history'] = UserLog::find_all_by_user_id($user->id);
+
+            $this->load->view('users/user_info', $data);
+        }
+        else
+        {
+            $this->load->redirect("Users/users");
+            exit;
+        }
+    }
 }

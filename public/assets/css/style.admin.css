@@ -201,8 +201,9 @@ a, a:hover {
  */
 .full-container {
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     width: 100%;
+    background-color: #F6F6F6;
 }
 
 .feather {
@@ -302,4 +303,51 @@ a, a:hover {
 .sidebar-heading {
     font-size: .75rem;
     text-transform: uppercase;
+}
+
+/*
+ * Main sections
+ */
+
+.main_section_header {
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 40px rgba(0,0,0,.05);
+    box-shadow: 0 0 40px rgba(0,0,0,.05);
+    border-radius: 3px;
+    padding: 20px;
+    margin: -7px 0 20px 0;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.main_section_header h1 {
+    font-weight: 700;
+    font-size: 1.3em;
+    margin: 0;
+}
+
+.card {
+    -webkit-box-shadow: 0 0 40px rgba(0,0,0,.05);
+    box-shadow: 0 0 40px rgba(0,0,0,.05);
+    background-color: #fff;
+    border-radius: 3px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.card .card-header {
+    border-bottom-color: #f9f9f9;
+    background-color: #fff;
+    line-height: 30px;
+}
+
+.card .card-header h3 {
+    font-size: 0.9em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 2px 0 -2px 0;
+    line-height: 30px;
 }
