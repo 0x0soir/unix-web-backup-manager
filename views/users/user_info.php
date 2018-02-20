@@ -18,37 +18,47 @@ $this->load->view('_/header', array(
                 <h3>Información básica</h3>
             </div>
             <div class="card-block p-4">
-                <form>
+                <form action="/Users/user_save/<?= $user_info->id ?>" method="post">
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-2 col-form-label">Nombre de usuario</label>
+                        <label class="col-2 col-form-label">Nombre de usuario</label>
                         <div class="col-10">
                             <input class="form-control" type="text" value="<?= $user_info->username ?>" name="username">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-2 col-form-label">Correo electrónico</label>
+                        <label class="col-2 col-form-label">Correo electrónico</label>
                         <div class="col-10">
                             <input class="form-control" type="email" value="<?= $user_info->email ?>" name="email">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-2 col-form-label">Última sesión</label>
+                        <label class="col-2 col-form-label">Última sesión</label>
                         <div class="col-10">
                             <input class="form-control" type="text" value="<?= $user_info->last_login ?>" name="last_login" disabled>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-2 col-form-label">Fecha de registro</label>
+                        <label class="col-2 col-form-label">Fecha de registro</label>
                         <div class="col-10">
                             <input class="form-control" type="text" value="<?= $user_info->created_at ?>" name="reg_date" disabled>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-2 col-form-label">Última edición</label>
+                        <label class="col-2 col-form-label">Última edición</label>
                         <div class="col-10">
                             <input class="form-control" type="text" value="<?= $user_info->updated_at ?>" name="mod_date" disabled>
                         </div>
                     </div>
+                    <hr>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Nueva contraseña</label>
+                        <div class="col-10">
+                            <input class="form-control" type="password" name="password">
+                            <small class="form-text text-muted">Rellenar únicamente si se desea actualizar la contraseña.</small>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-success">Actualizar</button>
+                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                 </form>
             </div>
         </div>

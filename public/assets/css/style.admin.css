@@ -216,6 +216,15 @@ a, a:hover {
     border-radius: 0.2rem;
 }
 
+.alert {
+    color: #fff;
+    border: none;
+}
+
+.alert-success {
+    background-color: #28a745;
+}
+
 /*
  * Navbar
  */

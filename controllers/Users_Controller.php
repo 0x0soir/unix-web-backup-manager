@@ -62,4 +62,38 @@ class Users_Controller extends Base_Controller {
             exit;
         }
     }
+
+    public function user_save($user_id)
+    {
+        $user = User::find_by_id($user_id);
+
+        $hash_options = [
+            'cost' => 6,
+        ];
+
+        if ($user)
+        {
+            $new_username   = $this->load->post_value('username');
+            $new_email      = $this->load->post_value('email');
+            $new_password   = $this->load->post_value('password');
+
+            if (isset($new_username) && isset($new_email))
+            {
+                $user->username = $new_username;
+                $user->email = $new_email;
+            }
+
+            if (isset($new_password) && ( ! empty($new_password)) )
+            {
+                $user->password = password_hash($new_password, PASSWORD_BCRYPT, $hash_options);
+            }
+
+            if ($user->save())
+            {
+                $this->load->view("common/success", array('message' => 'Datos actualizados correctamente.'));
+            }
+        }
+
+        $this->load->view("common/error", array('message' => 'No se han podido actualizar los datos.'));
+    }
 }
