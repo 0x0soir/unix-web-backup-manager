@@ -11,10 +11,12 @@ class Init {
             $controller = $params[0];
 
             $action = isset($params[1]) ? $params[1] : '';
+
+            $other_params = array_slice($params, 2);
         }
 
         $controller_obj = $this->_load_controller(isset($controller) ? $controller : BASE_CONTROLLER);
-        $this->_load_action($controller_obj, isset($action) ? $action : BASE_ACTION);
+        $this->_load_action($controller_obj, isset($action) ? $action : BASE_ACTION, isset($other_params) ? $other_params : array());
     }
 
     private function _load_controller($controller_var)
@@ -38,11 +40,11 @@ class Init {
         return $controller_obj;
     }
 
-    private function _load_action($controller_obj, $action = BASE_ACTION)
+    private function _load_action($controller_obj, $action, $other_params = NULL)
     {
         if(isset($action) && method_exists($controller_obj, $action))
         {
-            $controller_obj->$action();
+            call_user_func_array(array($controller_obj, $action), $other_params);
         }
     }
 }
