@@ -3,6 +3,8 @@ defined('BASE_PATH') OR exit('No direct script access allowed');
 
 class Loader {
 
+    private $notifications = array();
+
     function __construct()
     {
     }
@@ -25,7 +27,7 @@ class Loader {
         {
             $url = BASE_CONTROLLER."/".BASE_ACTION;
         }
-        
+
         header('Location: /'.$url);
     }
 
@@ -87,5 +89,37 @@ class Loader {
 		}
 
 		return $value;
+    }
+
+    function new_notification($message, $type = 'info')
+    {
+        if ( ( strlen($message) > 0 )
+            &&
+            (($type == 'info')||($type == 'success')||($type == 'danger')||($type == 'warning'))
+        )
+        {
+            array_push($this->notifications, array(
+                    'message'   => $message,
+                    'type'      => $type
+                )
+            );
+        }
+    }
+
+    function get_notifications()
+    {
+        $html_notifications = '';
+
+        if (count($this->notifications) > 0 )
+        {
+            foreach($this->notifications as $notification)
+            {
+                $html_notifications = $html_notifications.$this->load->view("common/".$notification['type'], array('message' => $notification['message']));
+            }
+
+            return $html_notifications;
+        }
+
+        return NULL;
     }
 }

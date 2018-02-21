@@ -6,6 +6,7 @@ $this->load->view('_/header', array(
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-4 mb-3 main_section_header">
     <h1>Usuarios</h1>
 </div>
+<?= $this->load->get_notifications() ?>
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -37,7 +38,7 @@ $this->load->view('_/header', array(
                                     <td align="center"><span class="badge badge-dark">0</span></td>
                                     <td align="right" class="p-0 pt-1">
                                         <a href="/Users/user/<?= $user->id ?>" class="btn btn-primary btn-sm">Información</a>
-                                        <button type="button" class="btn btn-danger btn-sm">Eliminar</button>
+                                        <a href="/Users/user_delete/<?= $user->id ?>" class="btn btn-danger btn-sm">Eliminar</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

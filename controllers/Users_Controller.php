@@ -90,10 +90,40 @@ class Users_Controller extends Base_Controller {
 
             if ($user->save())
             {
-                $this->load->view("common/success", array('message' => 'Datos actualizados correctamente.'));
+                $this->load->new_notification('Se han actualizado los datos correctamente.', 'success');
+            }
+            else
+            {
+                $this->load->new_notification('No se han podido actualizar los datos.', 'danger');
             }
         }
 
-        $this->load->view("common/error", array('message' => 'No se han podido actualizar los datos.'));
+        $this->user($user->id);
+    }
+
+    public function user_delete($user_id)
+    {
+        $user = User::find_by_id($user_id);
+
+        if ($user)
+        {
+            if ($user->id == $this->auth->get_actual_user()->id)
+            {
+                $this->load->new_notification('No puedes eliminarte a ti mismo.', 'danger');
+            }
+            else
+            {
+                if ($user->delete())
+                {
+                    $this->load->new_notification('Los datos del usuario han sido eliminados correctamente.', 'success');
+                }
+                else
+                {
+                    $this->load->new_notification('No se han podido eliminar los datos.', 'danger');
+                }
+            }
+        }
+
+        $this->users();
     }
 }

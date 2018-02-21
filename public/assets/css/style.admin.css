@@ -212,16 +212,23 @@ a, a:hover {
     vertical-align: text-bottom;
 }
 
+.feather-big {
+    width: 40px;
+    height: 40px;
+}
+
 .btn {
     border-radius: 0.2rem;
 }
 
 .alert {
-    color: #fff;
     border: none;
+    -webkit-box-shadow: 0 0 40px rgba(0,0,0,.05);
+    box-shadow: 0 0 40px rgba(0,0,0,.05);
 }
 
 .alert-success {
+    color: #fff;
     background-color: #28a745;
 }
 

@@ -11,6 +11,7 @@ $this->load->view('_/header', array(
       </div>
     </div>
 </div>
+<?= $this->load->get_notifications() ?>
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -58,7 +59,7 @@ $this->load->view('_/header', array(
                         </div>
                     </div>
                     <button type="submit" class="btn btn-sm btn-success">Actualizar</button>
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <a href="/Users/user_delete/<?= $user_info->id ?>" class="btn btn-sm btn-danger">Eliminar</a>
                 </form>
             </div>
         </div>
