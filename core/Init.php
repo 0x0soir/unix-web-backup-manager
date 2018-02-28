@@ -16,7 +16,7 @@ class Init {
         }
 
         $controller_obj = $this->_load_controller(isset($controller) ? $controller : BASE_CONTROLLER);
-        $this->_load_action($controller_obj, isset($action) ? $action : BASE_ACTION, isset($other_params) ? $other_params : array());
+        $this->_load_action($controller_obj, isset($action) && ( ! empty($action) ) ? $action : BASE_ACTION, isset($other_params) ? $other_params : array());
     }
 
     private function _load_controller($controller_var)
