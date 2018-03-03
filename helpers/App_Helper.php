@@ -44,3 +44,12 @@ function check_perm($permission)
     }
     return FALSE;
 }
+
+function get_bytes_correct_format($size, $precision = 2)
+{
+    $size_base = log($size, 1024);
+
+    $suff = array('bytes', 'KB', 'MB', 'GB', 'TB');
+
+    return round(pow(1024, $size_base - floor($size_base)), $precision) .' '. $suff[floor($size_base)];
+}

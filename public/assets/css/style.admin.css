@@ -371,3 +371,15 @@ a, a:hover {
     margin: 2px 0 -2px 0;
     line-height: 30px;
 }
+
+#loaded_directories table tbody tr {
+    cursor: pointer;
+}
+
+#loaded_directories table tbody td {
+    color: #9c9c9c;
+}
+
+#loaded_directories table tbody td:first-child {
+    color: #b5302d !important;
+}

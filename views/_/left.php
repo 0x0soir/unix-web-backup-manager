@@ -5,12 +5,21 @@ $menu = array(
         'url' => '/Dashboards/index',
         'icon' => 'home',
         'label' => 'Inicio'
+    )
+);
+
+$backups_menu = array(
+    array(
+        'id' => 'backups_backups',
+        'url' => '/Backups/backups',
+        'icon' => 'layers',
+        'label' => 'Realizados'
     ),
     array(
-        'id' => 'backups_index',
-        'url' => '/Backups/index',
-        'icon' => 'layers',
-        'label' => 'Backups'
+        'id' => 'backups_scripts',
+        'url' => '/Backups/scripts',
+        'icon' => 'clock',
+        'label' => 'Programados'
     )
 );
 
@@ -35,7 +44,19 @@ $admin_menu = array(
                 </li>
             <?php endforeach; ?>
         </ul>
-
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Backups</span>
+        </h6>
+        <ul class="nav flex-column">
+            <?php foreach ($backups_menu as $menu_item): ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= ! empty($menu_active) && $menu_active == $menu_item['id'] ? 'active' : '' ?>" href="<?= $menu_item['url'] ?>">
+                        <span data-feather="<?= $menu_item['icon'] ?>"></span>
+                        <?= $menu_item['label'] ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
         <?php if(check_perm('ADMIN')): ?>
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>Administración</span>

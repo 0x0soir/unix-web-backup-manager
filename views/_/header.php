@@ -14,6 +14,9 @@
         <!-- Bootstrap core CSS -->
         <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
 
+        <!-- DateTime Picker -->
+        <link href="/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
         <!-- Custom -->
         <link href="/assets/css/style.admin.css" rel="stylesheet">
     </head>
