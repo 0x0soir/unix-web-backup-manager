@@ -42,6 +42,11 @@
         });
     }
 
+    $(document).on('click', '#new_select_directory_close', function(e){
+        $('.new_select_directory').modal('hide');
+        $('.new_backup_modal').modal('show');
+    });
+
     $(document).on('click', '#new_select_directory_use', function(e){
         $('[name=source_directory]').val($('#loaded_directories .actual_directory').text());
 

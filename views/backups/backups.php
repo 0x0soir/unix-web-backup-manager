@@ -25,7 +25,7 @@ $this->load->view('_/header', array(
                             <tr>
                                 <th>#</th>
                                 <th>Tipo</th>
-                                <th>Status</th>
+                                <th>Estado</th>
                                 <th>Fecha de inicio</th>
                                 <th>Fecha de fin</th>
                                 <th class="text-center"><span data-feather="file"></span> Directorio</th>
@@ -36,11 +36,11 @@ $this->load->view('_/header', array(
                             <?php foreach($backups as $backup): ?>
                                 <tr>
                                     <td><?= $backup->id ?></td>
-                                    <td><?= $backup->type ?></td>
-                                    <td><?= $backup->status ?></td>
                                     <td><?= $backup->get_type_text() ?></td>
-                                    <td><?= $backup->start_date ?></td>
-                                    <td><?= $backup->end_date ?></td>
+                                    <td><?= $backup->get_state_text() ?></td>
+                                    <td><?= get_real_date($backup->start_date)?></td>
+                                    <td><?= get_real_date($backup->end_date) ?></td>
+                                    <td><?= $backup->source_directory ?></td>
                                     <td align="right" class="p-0 pt-1">
                                         <a href="/Backups/backup/<?= $backup->id ?>" class="btn btn-primary btn-sm">Información</a>
                                         <a href="/Backups/backup_delete/<?= $backup->id ?>" class="btn btn-danger btn-sm">Eliminar</a>
@@ -54,9 +54,9 @@ $this->load->view('_/header', array(
         </div>
     </div>
 </div>
+<?= $this->load->view('_modals/_new_backup') ?>
+<?= $this->load->view('_modals/_select_directory', array()) ?>
 <?php
-$this->load->view('_modals/_new_backup', array());
-$this->load->view('_modals/_select_directory', array());
 $this->load->view('_/footer', array(
     'js_scripts' => TRUE
 ));

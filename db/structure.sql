@@ -50,11 +50,13 @@ CREATE TABLE `user_perm_to_users` (
 
 DROP TABLE IF EXISTS user_perm_to_users;
 
+DROP TABLE IF EXISTS backups;
+
 CREATE TABLE `backups` (
   `id` int(11) not null auto_increment,
   `user_id` int(11) NOT NULL,
   `type` tinyint(1) NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `state` tinyint(1) NOT NULL,
   `start_date` DATETIME NOT NULL,
   `end_date` DATETIME NOT NULL,
   `source_directory` varchar(4351) NOT NULL,
@@ -65,6 +67,18 @@ CREATE TABLE `backups` (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_pk_backups_to_users_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS backup_logs;
+
+CREATE TABLE backup_logs(
+  id int not null primary key auto_increment,
+  backup_id int(11) NOT NULL,
+  history varchar(200),
+  ip varchar(64) NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT `FK_pk_backup_logs_backup` FOREIGN KEY (`backup_id`) REFERENCES `backups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET foreign_key_checks = 1;

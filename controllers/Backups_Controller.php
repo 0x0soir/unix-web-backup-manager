@@ -17,33 +17,49 @@ class Backups_Controller extends Base_Controller {
     {
         $data = array();
 
-        $data['users'] = User::all();
+        $data['backups'] = Backup::find_all_by_user_id($this->auth->get_actual_user()->id);
 
-        $this->load->view('users/users', $data);
+        $this->load->view('backups/backups', $data);
     }
 
-    public function scripts()
+    public function backup($backup_id)
     {
-        $data = array();
+        $backup = Backup::find_by_id(intval($backup_id));
 
-        $data['backups'] = Backup::all();
+        if ($backup)
+        {
+            $data = array();
 
-        $this->load->view('backups/scripts', $data);
+            $data['backup_info']    = $backup;
+            $data['backup_logs']    = BackupLog::find_all_by_backup_id($backup->id);
+
+            $this->load->view('backups/backup_info', $data);
+        }
+        else
+        {
+            $this->load->redirect("Backups/backups");
+            exit;
+        }
     }
 
     public function backup_save($backup_id = NULL)
     {
         if (intval($backup_id) > 0)
         {
-            // Save
+            // Get actual backup and save
+            $backup = Backup::find_by_id(intval($backup_id));
         }
         else
         {
             // Create
-            $backup                         = new Backup();
+            $backup = new Backup();
+        }
+
+        if ($backup)
+        {
             $backup->user_id                = $this->auth->get_actual_user()->id;
             $backup->type                   = intval($this->load->post_value('type'));
-            $backup->status                 = intval($this->load->post_value('status'));
+            $backup->state                  = intval($this->load->post_value('state'));
             $backup->start_date             = $this->load->post_value('start_date');
             $backup->end_date               = $this->load->post_value('end_date');
             $backup->source_directory       = $this->load->post_value('source_directory');
@@ -51,11 +67,11 @@ class Backups_Controller extends Base_Controller {
             $backup->excluded_extensions    = $this->load->post_value('excluded_extensions');
             $backup->excluded_directories   = $this->load->post_value('excluded_directories');
 
-            if (($backup->type <=> 2) && ($backup->status <=> 2))
+            if (($backup->type <=> 3) && ($backup->state <=> 3))
             {
 
-                $start_date = DateTime::createFromFormat('d/m/Y - H:i', $this->load->post_value('start_date'));
-                $end_date = DateTime::createFromFormat('d/m/Y - H:i', $this->load->post_value('end_date'));
+                $start_date = DateTime::createFromFormat('d/m/Y H:i', $this->load->post_value('start_date'));
+                $end_date = DateTime::createFromFormat('d/m/Y H:i', $this->load->post_value('end_date'));
 
                 if ($start_date && $end_date)
                 {
@@ -63,33 +79,40 @@ class Backups_Controller extends Base_Controller {
                     $backup->end_date = $end_date->format('Y/m/d H:i:s');
                 }
 
-                if ($backup->save())
-                {
-                    echo json_encode(array(
-                            'status' => '1'
-                        )
-                    );
-                    exit;
+                try {
+                    if ($backup->save())
+                    {
+                        if (intval($backup_id) > 0)
+                        {
+                            $this->load->new_notification('Se han actualizado los datos correctamente.', 'success');
+                        }
+                        else
+                        {
+                            echo json_encode(array(
+                                    'status' => '1'
+                                )
+                            );
+                            exit;
+                        }
+                    }
+                } catch (Exception $e) {
+                    if (intval($backup_id) > 0)
+                    {
+                        $this->load->new_notification('No se han podido actualizar los datos.', 'danger');
+                    }
+                    else
+                    {
+                        echo json_encode(array(
+                                'status' => '0'
+                            )
+                        );
+                        exit;
+                    }
                 }
-
-                // try {
-                //     if ($backup->save())
-                //     {
-                //         echo json_encode(array(
-                //                 'status' => '1'
-                //             )
-                //         );
-                //         exit;
-                //     }
-                // } catch (Exception $e) {
-                //     echo json_encode(array(
-                //             'status' => '0'
-                //         )
-                //     );
-                //     exit;
-                // }
             }
         }
+
+        $this->backup(intval($backup_id));
     }
 
     function _get_directory_iterator_to_array(DirectoryIterator $iterator)

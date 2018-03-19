@@ -53,3 +53,8 @@ function get_bytes_correct_format($size, $precision = 2)
 
     return round(pow(1024, $size_base - floor($size_base)), $precision) .' '. $suff[floor($size_base)];
 }
+
+function get_real_date($datetime)
+{
+    return $datetime->format('d/m/Y H:i');
+}
