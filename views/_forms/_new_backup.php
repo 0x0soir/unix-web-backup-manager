@@ -59,5 +59,61 @@
             <textarea class="form-control" name="excluded_directories"><?= isset($backup_info) ? $backup_info->excluded_directories : '' ?></textarea>
         </div>
     </div>
+    <hr>
+    <div class="row">
+        <div class="form-group col-4 col-md-2">
+            <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Horas:</label>
+            <select multiple="" size="10" name="selectHours[]" class="form-control">
+                <?php for ($i = 0; $i <= 23; $i++): ?>
+                    <option value="<?= $i ?>"><?= $i ?></option>
+                <?php endfor; ?>
+            </select>
+        </div>
+        <div class="form-group col-4 col-md-2">
+            <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Minutos:</label>
+            <select multiple="" size="10" name="selectMinutes[]" class="form-control">
+                <?php for ($i = 0; $i <= 59; $i++): ?>
+                    <option value="<?= $i ?>"><?= $i ?></option>
+                <?php endfor; ?>
+            </select>
+        </div>
+        <div class="form-group col-4 col-md-2">
+            <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Días:</label>
+            <select multiple="" size="10" name="selectDays[]" class="form-control">
+                <?php for ($i = 1; $i <= 31; $i++): ?>
+                    <option value="<?= $i ?>"><?= $i ?></option>
+                <?php endfor; ?>
+            </select>
+        </div>
+        <div class="form-group col-6 col-md-3">
+            <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Meses:</label>
+            <select multiple="" size="10" name="selectMonths[]" class="form-control">
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5">Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+        <div class="form-group col-6 col-md-3">
+            <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Día de la semana:</label>
+            <select multiple="" size="10" name="selectWeekDays[]" class="form-control">
+                <option value="1">Domingo</option>
+                <option value="1">Lunes</option>
+                <option value="2">Martes</option>
+                <option value="3">Miércoles</option>
+                <option value="4">Jueves</option>
+                <option value="5">Viernes</option>
+                <option value="6">Sábado</option>
+            </select>
+        </div>
+    </div>
     <?= isset($backup_info) ? '<button type="submit" class="btn btn-success">Actualizar datos</button>' : '' ?>
 </form>

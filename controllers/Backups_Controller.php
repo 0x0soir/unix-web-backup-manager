@@ -67,6 +67,15 @@ class Backups_Controller extends Base_Controller {
             $backup->excluded_extensions    = $this->load->post_value('excluded_extensions');
             $backup->excluded_directories   = $this->load->post_value('excluded_directories');
 
+            $cronjob = array(
+                'cron_hours'        => $this->load->post_value('selectHours'),
+                'cron_minutes'      => $this->load->post_value('selectMinutes'),
+                'cron_days'         => $this->load->post_value('selectDays'),
+                'cron_months'       => $this->load->post_value('selectMonths'),
+                'cron_week_days'    => $this->load->post_value('selectWeekDays'),
+                'cron_command'      => 'test'
+            );
+
             if (($backup->type <=> 3) && ($backup->state <=> 3))
             {
 
@@ -77,6 +86,18 @@ class Backups_Controller extends Base_Controller {
                 {
                     $backup->start_date = $start_date->format('Y/m/d H:i:s');
                     $backup->end_date = $end_date->format('Y/m/d H:i:s');
+                }
+
+                $cronjob_string = $this->_build_cronjob($cronjob);
+
+                if ($cronjob_string != NULL)
+                {
+                    $backup->cronjob = $cronjob_string;
+                }
+                else
+                {
+                    // no guardar
+                    exit;
                 }
 
                 try {
@@ -161,6 +182,67 @@ class Backups_Controller extends Base_Controller {
             )
         );
         exit;
+    }
+
+    public function _build_cronjob($cronjob)
+    {
+        $cron_string = array();
+
+        if (count($cronjob['cron_minutes']) > 0)
+        {
+            $cron_string['minutes'] = implode(',', $cronjob['cron_minutes']);
+        }
+        else
+        {
+            $cron_string['minutes'] = '*';
+        }
+
+        if (count($cronjob['cron_hours']) > 0)
+        {
+            $cron_string['hours'] = implode(',', $cronjob['cron_hours']);
+        }
+        else
+        {
+            $cron_string['hours'] = '*';
+        }
+
+        if (count($cronjob['cron_days']) > 0)
+        {
+            $cron_string['days'] = implode(',', $cronjob['cron_days']);
+        }
+        else
+        {
+            $cron_string['days'] = '*';
+        }
+
+        if (count($cronjob['cron_months']) > 0)
+        {
+            $cron_string['months'] = implode(',', $cronjob['cron_months']);
+        }
+        else
+        {
+            $cron_string['months'] = '*';
+        }
+
+        if (count($cronjob['cron_week_days']) > 0)
+        {
+            $cron_string['week_days'] = implode(',', $cronjob['cron_week_days']);
+        }
+        else
+        {
+            $cron_string['week_days'] = '*';
+        }
+
+        if (trim($cronjob['cron_command']) != NULL)
+        {
+            $cron_string['command'] = $cronjob['cron_command'];
+        }
+        else
+        {
+            return NULL;
+        }
+
+        return implode(' ', $cron_string);
     }
 
 }
