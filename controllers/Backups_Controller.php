@@ -93,30 +93,40 @@ class Backups_Controller extends Base_Controller {
                 if ($cronjob_string != NULL)
                 {
                     $backup->cronjob = $cronjob_string;
-                }
-                else
-                {
-                    // no guardar
-                    exit;
-                }
 
-                try {
-                    if ($backup->save())
-                    {
+                    try {
+                        if ($backup->save())
+                        {
+                            if (intval($backup_id) > 0)
+                            {
+                                $this->load->new_notification('Se han actualizado los datos correctamente.', 'success');
+                            }
+                            else
+                            {
+                                echo json_encode(array(
+                                        'status' => '1'
+                                    )
+                                );
+                                exit;
+                            }
+                        }
+                    } catch (Exception $e) {
                         if (intval($backup_id) > 0)
                         {
-                            $this->load->new_notification('Se han actualizado los datos correctamente.', 'success');
+                            $this->load->new_notification('No se han podido actualizar los datos.', 'danger');
                         }
                         else
                         {
                             echo json_encode(array(
-                                    'status' => '1'
+                                    'status' => '0'
                                 )
                             );
                             exit;
                         }
                     }
-                } catch (Exception $e) {
+                }
+                else
+                {
                     if (intval($backup_id) > 0)
                     {
                         $this->load->new_notification('No se han podido actualizar los datos.', 'danger');
