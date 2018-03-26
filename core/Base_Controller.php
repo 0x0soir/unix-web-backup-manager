@@ -31,6 +31,7 @@ class Base_Controller {
         {
             $this->load->redirect('users/index');
         }
+        $this->check_operating_system();
     }
 
     private function _check_public_url()
@@ -42,6 +43,14 @@ class Base_Controller {
         }
 
         return FALSE;
+    }
+
+    function check_operating_system()
+    {
+        if ( ! in_array(PHP_OS, ALLOWED_OPERATING_SYSTEM) )
+        {
+            $this->load->new_notification('El sistema operativo actual no está soportado por la plataforma, las copias de seguridad no se realizarán.<br>Los sistemas operativos soportados son: '.implode(", ", ALLOWED_OPERATING_SYSTEM), 'warning');
+        }
     }
 
 }
