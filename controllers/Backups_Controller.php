@@ -88,7 +88,7 @@ class Backups_Controller extends Base_Controller {
                     $backup->end_date = $end_date->format('Y/m/d H:i:s');
                 }
 
-                $cronjob_string = $this->_build_cronjob($cronjob);
+                $cronjob_string = $backup->build_cronjob($cronjob);
 
                 if ($cronjob_string != NULL)
                 {
@@ -182,67 +182,6 @@ class Backups_Controller extends Base_Controller {
             )
         );
         exit;
-    }
-
-    public function _build_cronjob($cronjob)
-    {
-        $cron_string = array();
-
-        if (count($cronjob['cron_minutes']) > 0)
-        {
-            $cron_string['minutes'] = implode(',', $cronjob['cron_minutes']);
-        }
-        else
-        {
-            $cron_string['minutes'] = '*';
-        }
-
-        if (count($cronjob['cron_hours']) > 0)
-        {
-            $cron_string['hours'] = implode(',', $cronjob['cron_hours']);
-        }
-        else
-        {
-            $cron_string['hours'] = '*';
-        }
-
-        if (count($cronjob['cron_days']) > 0)
-        {
-            $cron_string['days'] = implode(',', $cronjob['cron_days']);
-        }
-        else
-        {
-            $cron_string['days'] = '*';
-        }
-
-        if (count($cronjob['cron_months']) > 0)
-        {
-            $cron_string['months'] = implode(',', $cronjob['cron_months']);
-        }
-        else
-        {
-            $cron_string['months'] = '*';
-        }
-
-        if (count($cronjob['cron_week_days']) > 0)
-        {
-            $cron_string['week_days'] = implode(',', $cronjob['cron_week_days']);
-        }
-        else
-        {
-            $cron_string['week_days'] = '*';
-        }
-
-        if (trim($cronjob['cron_command']) != NULL)
-        {
-            $cron_string['command'] = $cronjob['cron_command'];
-        }
-        else
-        {
-            return NULL;
-        }
-
-        return implode(' ', $cron_string);
     }
 
 }

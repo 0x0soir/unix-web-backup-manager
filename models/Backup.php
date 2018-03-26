@@ -40,4 +40,160 @@ class Backup extends ActiveRecord\Model
     {
         return $this->states;
     }
+
+    public function build_cronjob($cronjob)
+    {
+        $cron_string = array();
+
+        if (count($cronjob['cron_minutes']) > 0)
+        {
+            $cron_string['minutes'] = implode(',', $cronjob['cron_minutes']);
+        }
+        else
+        {
+            $cron_string['minutes'] = '*';
+        }
+
+        if (count($cronjob['cron_hours']) > 0)
+        {
+            $cron_string['hours'] = implode(',', $cronjob['cron_hours']);
+        }
+        else
+        {
+            $cron_string['hours'] = '*';
+        }
+
+        if (count($cronjob['cron_days']) > 0)
+        {
+            $cron_string['days'] = implode(',', $cronjob['cron_days']);
+        }
+        else
+        {
+            $cron_string['days'] = '*';
+        }
+
+        if (count($cronjob['cron_months']) > 0)
+        {
+            $cron_string['months'] = implode(',', $cronjob['cron_months']);
+        }
+        else
+        {
+            $cron_string['months'] = '*';
+        }
+
+        if (count($cronjob['cron_week_days']) > 0)
+        {
+            $cron_string['week_days'] = implode(',', $cronjob['cron_week_days']);
+        }
+        else
+        {
+            $cron_string['week_days'] = '*';
+        }
+
+        if (trim($cronjob['cron_command']) != NULL)
+        {
+            $cron_string['command'] = $cronjob['cron_command'];
+        }
+        else
+        {
+            return NULL;
+        }
+
+        return implode(' ', $cron_string);
+    }
+
+    public function get_cronjob_minutes()
+    {
+        if ($this->cronjob != NULL)
+        {
+            $parts = explode(" ", $this->cronjob);
+
+            if ($parts == "*")
+            {
+                return array();
+            }
+            else
+            {
+                return explode(",", $parts[0]);
+            }
+        }
+
+        return array();
+    }
+
+    public function get_cronjob_hours()
+    {
+        if ($this->cronjob != NULL)
+        {
+            $parts = explode(" ", $this->cronjob);
+
+            if ($parts == "*")
+            {
+                return array();
+            }
+            else
+            {
+                return explode(",", $parts[1]);
+            }
+        }
+
+        return array();
+    }
+
+    public function get_cronjob_days()
+    {
+        if ($this->cronjob != NULL)
+        {
+            $parts = explode(" ", $this->cronjob);
+
+            if ($parts == "*")
+            {
+                return array();
+            }
+            else
+            {
+                return explode(",", $parts[2]);
+            }
+        }
+
+        return array();
+    }
+
+    public function get_cronjob_months()
+    {
+        if ($this->cronjob != NULL)
+        {
+            $parts = explode(" ", $this->cronjob);
+
+            if ($parts == "*")
+            {
+                return array();
+            }
+            else
+            {
+                return explode(",", $parts[3]);
+            }
+        }
+
+        return array();
+    }
+
+    public function get_cronjob_week_days()
+    {
+        if ($this->cronjob != NULL)
+        {
+            $parts = explode(" ", $this->cronjob);
+
+            if ($parts == "*")
+            {
+                return array();
+            }
+            else
+            {
+                return explode(",", $parts[4]);
+            }
+        }
+
+        return array();
+    }
 }

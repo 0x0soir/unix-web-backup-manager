@@ -61,11 +61,14 @@
     </div>
     <hr>
     <div class="row">
+        <div class="col-12 alert alert-info">
+            <span data-feather="command"></span> Ctrl+click (command+click en Mac) para seleccionar múltiples elementos.
+        </div>
         <div class="form-group col-4 col-md-2">
             <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Horas:</label>
             <select multiple="" size="10" name="selectHours[]" class="form-control">
                 <?php for ($i = 0; $i <= 23; $i++): ?>
-                    <option value="<?= $i ?>"><?= $i ?></option>
+                    <option value="<?= $i ?>" <?= isset($backup_info) ? in_array($i, $backup_info->get_cronjob_hours()) ? 'selected' : '' : '' ?>><?= $i ?></option>
                 <?php endfor; ?>
             </select>
         </div>
@@ -73,7 +76,7 @@
             <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Minutos:</label>
             <select multiple="" size="10" name="selectMinutes[]" class="form-control">
                 <?php for ($i = 0; $i <= 59; $i++): ?>
-                    <option value="<?= $i ?>"><?= $i ?></option>
+                    <option value="<?= $i ?>" <?= isset($backup_info) ? in_array($i, $backup_info->get_cronjob_minutes()) ? 'selected' : '' : '' ?>><?= $i ?></option>
                 <?php endfor; ?>
             </select>
         </div>
@@ -81,37 +84,37 @@
             <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Días:</label>
             <select multiple="" size="10" name="selectDays[]" class="form-control">
                 <?php for ($i = 1; $i <= 31; $i++): ?>
-                    <option value="<?= $i ?>"><?= $i ?></option>
+                    <option value="<?= $i ?>" <?= isset($backup_info) ? in_array($i, $backup_info->get_cronjob_days()) ? 'selected' : '' : '' ?>><?= $i ?></option>
                 <?php endfor; ?>
             </select>
         </div>
         <div class="form-group col-6 col-md-3">
             <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Meses:</label>
             <select multiple="" size="10" name="selectMonths[]" class="form-control">
-                <option value="1">Enero</option>
-                <option value="2">Febrero</option>
-                <option value="3">Marzo</option>
-                <option value="4">Abril</option>
-                <option value="5">Mayo</option>
-                <option value="6">Junio</option>
-                <option value="7">Julio</option>
-                <option value="8">Agosto</option>
-                <option value="9">Septiembre</option>
-                <option value="10">Octubre</option>
-                <option value="11">Noviembre</option>
-                <option value="12">Diciembre</option>
+                <option value="1" <?= isset($backup_info) ? in_array("1", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Enero</option>
+                <option value="2" <?= isset($backup_info) ? in_array("2", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Febrero</option>
+                <option value="3" <?= isset($backup_info) ? in_array("3", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Marzo</option>
+                <option value="4" <?= isset($backup_info) ? in_array("4", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Abril</option>
+                <option value="5" <?= isset($backup_info) ? in_array("5", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Mayo</option>
+                <option value="6" <?= isset($backup_info) ? in_array("6", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Junio</option>
+                <option value="7" <?= isset($backup_info) ? in_array("7", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Julio</option>
+                <option value="8" <?= isset($backup_info) ? in_array("8", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Agosto</option>
+                <option value="9" <?= isset($backup_info) ? in_array("9", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Septiembre</option>
+                <option value="10" <?= isset($backup_info) ? in_array("10", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Octubre</option>
+                <option value="11" <?= isset($backup_info) ? in_array("11", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Noviembre</option>
+                <option value="12" <?= isset($backup_info) ? in_array("12", $backup_info->get_cronjob_months()) ? 'selected' : '' : '' ?>>Diciembre</option>
             </select>
         </div>
         <div class="form-group col-6 col-md-3">
-            <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Día de la semana:</label>
+            <label for="message-text" class="col-form-label"><span data-feather="file-minus"></span> Días de la semana:</label>
             <select multiple="" size="10" name="selectWeekDays[]" class="form-control">
-                <option value="1">Domingo</option>
-                <option value="1">Lunes</option>
-                <option value="2">Martes</option>
-                <option value="3">Miércoles</option>
-                <option value="4">Jueves</option>
-                <option value="5">Viernes</option>
-                <option value="6">Sábado</option>
+                <option value="0" <?= isset($backup_info) ? in_array("0", $backup_info->get_cronjob_week_days()) ? 'selected' : '' : '' ?>>Domingo</option>
+                <option value="1" <?= isset($backup_info) ? in_array("1", $backup_info->get_cronjob_week_days()) ? 'selected' : '' : '' ?>>Lunes</option>
+                <option value="2" <?= isset($backup_info) ? in_array("2", $backup_info->get_cronjob_week_days()) ? 'selected' : '' : '' ?>>Martes</option>
+                <option value="3" <?= isset($backup_info) ? in_array("3", $backup_info->get_cronjob_week_days()) ? 'selected' : '' : '' ?>>Miércoles</option>
+                <option value="4" <?= isset($backup_info) ? in_array("4", $backup_info->get_cronjob_week_days()) ? 'selected' : '' : '' ?>>Jueves</option>
+                <option value="5" <?= isset($backup_info) ? in_array("5", $backup_info->get_cronjob_week_days()) ? 'selected' : '' : '' ?>>Viernes</option>
+                <option value="6" <?= isset($backup_info) ? in_array("6", $backup_info->get_cronjob_week_days()) ? 'selected' : '' : '' ?>>Sábado</option>
             </select>
         </div>
     </div>
