@@ -146,7 +146,7 @@ class Backups_Controller extends Base_Controller {
         $this->backup(intval($backup_id));
     }
 
-    function _get_directory_iterator_to_array(DirectoryIterator $iterator)
+    private function _get_directory_iterator_to_array(DirectoryIterator $iterator)
     {
         $result = array();
 
@@ -192,6 +192,94 @@ class Backups_Controller extends Base_Controller {
             )
         );
         exit;
+    }
+
+    public function cronjob($id)
+    {
+        $id = intval($id);
+
+        if ($id > 0)
+        {
+            // get script by id
+            $script = Backup::find_by_id($id);
+
+            // check if script exists
+            if ($script)
+            {
+                // check if can write destiny
+                if ($script->target_directory)
+                {
+                    $source_directory = realpath(trim($script->source_directory));
+                    $target_directory = realpath(trim($script->target_directory));
+                    $excluded_extensions = explode(" ", $script->excluded_extensions);
+                    $excluded_extensions = array_map('strtolower', $excluded_extensions);
+                    $excluded_directories = explode(" ", $script->excluded_directories);
+                    $excluded_directories = array_map('strtolower', $excluded_directories);
+
+                    if (is_dir($source_directory) && is_readable($source_directory) && is_dir($target_directory) && is_writable($target_directory))
+                    {
+                        $filter = function ($file, $key, $iterator) use ($source_directory, $excluded_directories) {
+                            // --> ignore dirs
+                            if ($iterator->isDir() && $iterator->hasChildren() && ! in_array($file->getFilename(), $excluded_directories))
+                            {
+                                return true;
+                            }
+                            if ($file->isFile())
+                            {
+                                $dir_parts = explode($source_directory, $file->getPath());
+                                $dir_parts = explode("/", $dir_parts[1]);
+                                $dir_parts = array_map('strtolower', $dir_parts);
+
+                                if (count(array_diff($dir_parts, $excluded_directories)) != count($dir_parts))
+                                {
+                                    return false;
+                                }
+                            }
+                            return $file->isFile();
+                        };
+
+                        $innerIterator = new RecursiveDirectoryIterator(
+                            $source_directory,
+                            RecursiveDirectoryIterator::SKIP_DOTS
+                        );
+
+                        $iterator = new RecursiveIteratorIterator(
+                            new RecursiveCallbackFilterIterator($innerIterator, $filter)
+                        );
+
+                        // do backup
+                        $target_compress_data = new PharData($script->target_directory.'/'.md5($script->target_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
+
+                        try {
+                            foreach ($iterator as $directory)
+                            {
+                                if ($directory->isFile())
+                                {
+                                    // --> ignore extensions
+                                    if ( ! in_array(strtolower($directory->getExtension()), $excluded_extensions))
+                                    {
+                                        $target_compress_data->addFile($directory);
+                                        //echo "<br>NO SE IGNORA Fichero: ".$directory." ".$directory->getBaseName();
+                                    }
+
+                                }
+                            }
+
+                            // save backup tar gz
+                            $target_compress_data->compress(Phar::GZ);
+                        }
+                        catch (Exception $e)
+                        {
+                            echo "error";
+                        }
+                    }
+                }
+            }
+
+            // insert into historic data
+            // generate rsa protection
+            // send email with key to user
+        }
     }
 
 }
