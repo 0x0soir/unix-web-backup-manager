@@ -176,7 +176,7 @@ class Backups_Controller extends Base_Controller {
 
     public function get_directories()
     {
-        $target_dir = ! empty($this->load->post_value('target_dir')) ? $this->load->post_value('target_dir') : '/Users/soir';
+        $target_dir = ! empty($this->load->post_value('target_dir')) ? $this->load->post_value('target_dir') : BASE_DIRECTORY_NEW_SCRIPT;
         $files = $this->_get_directory_iterator_to_array(new DirectoryIterator($target_dir));
 
         $result = '';
