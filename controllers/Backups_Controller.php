@@ -282,4 +282,114 @@ class Backups_Controller extends Base_Controller {
         }
     }
 
+    public function cronjob_delete($id)
+    {
+        $id = intval($id);
+
+        if ($id > 0)
+        {
+            $script = Backup::find_by_id($id);
+
+            if ($script)
+            {
+                if ($this->cronjob_check_exists($id))
+                {
+                    echo "existe";
+                    $actual_crons = shell_exec('crontab -l');
+                    file_put_contents('/tmp/crontab.txt', $actual_crons.PHP_EOL);
+
+                    $tmp_contents = file('/tmp/crontab.txt', FILE_SKIP_EMPTY_LINES);
+
+                    $tmp_contents = str_replace($script->get_custom_cronjob(), '', $tmp_contents);
+
+                    $tmp_contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "", $tmp_contents);
+
+                    file_put_contents('/tmp/crontab.txt', $tmp_contents);
+
+                    exec('crontab /tmp/crontab.txt');
+                }
+            }
+        }
+    }
+
+    public function cronjob_get_all()
+    {
+        exec('crontab -l', $crontab);
+        print_r($crontab);
+    }
+
+    public function cronjob_remove_all()
+    {
+        exec('crontab -r');
+    }
+
+    public function cronjob_add($id){
+        $id = intval($id);
+        $cronjob_added = false;
+
+        if ($id > 0)
+        {
+            $script = Backup::find_by_id($id);
+
+            if ($script)
+            {
+                $this->cronjob_delete($id);
+
+                if (is_string($script->get_custom_cronjob()) && ( ! empty($script->get_custom_cronjob())) && ($this->cronjob_check_exists($id, $script->get_custom_cronjob())===FALSE))
+                {
+                    $actual_crons = shell_exec('crontab -l');
+                    file_put_contents('/tmp/crontab.txt', $actual_crons.$script->get_custom_cronjob().PHP_EOL);
+                    exec('crontab /tmp/crontab.txt');
+
+                    $cronjob_added = true;
+                }
+                else {
+                    echo "no mete";
+                    $test_output = shell_exec('crontab -l');
+                    echo $test_output;
+                }
+            }
+        }
+
+        return $cronjob_added;
+    }
+
+    public function cronjob_check_exists($id, $command = NULL)
+    {
+        $id = intval($id);
+        $cronjob_exists = false;
+
+        if ($id > 0)
+        {
+            $script = Backup::find_by_id($id);
+
+            if ($script)
+            {
+                exec('crontab -l', $crontab);
+
+                if (isset($crontab) && is_array($crontab)){
+
+                    if ($command)
+                    {
+                        $crontab = array_flip($crontab);
+
+                        if(isset($crontab[$command])){
+                            $cronjob_exists = true;
+                        }
+                    }
+                    else
+                    {
+                        foreach ($crontab as $cron) {
+                            if (strpos($cron, '# TFG Admin Script '.$id) !== false) {
+                                $cronjob_exists = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $cronjob_exists;
+    }
+
 }
