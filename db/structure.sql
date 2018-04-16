@@ -48,8 +48,6 @@ CREATE TABLE `user_perm_to_users` (
   CONSTRAINT `FK_pk_user_perm_to_users_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS user_perm_to_users;
-
 DROP TABLE IF EXISTS backups;
 
 CREATE TABLE `backups` (
