@@ -216,7 +216,7 @@ class Backups_Controller extends Base_Controller {
                     $excluded_directories = explode(" ", $script->excluded_directories);
                     $excluded_directories = array_map('strtolower', $excluded_directories);
 
-                    if (is_dir($source_directory) && is_readable($source_directory) && is_dir($target_directory) && is_writable($target_directory))
+                    if (is_dir($source_directory) && is_readable($source_directory) && is_dir($target_directory))
                     {
                         $filter = function ($file, $key, $iterator) use ($source_directory, $excluded_directories) {
                             // --> ignore dirs
@@ -248,7 +248,7 @@ class Backups_Controller extends Base_Controller {
                         );
 
                         // do backup
-                        $target_compress_data = new PharData($script->target_directory.'/'.md5($script->target_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
+                        $target_compress_data = new PharData($script->target_directory.'/holi_'.md5($script->target_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
 
                         try {
                             foreach ($iterator as $directory)
@@ -272,6 +272,10 @@ class Backups_Controller extends Base_Controller {
                         {
                             echo "error";
                         }
+                    }
+                    else
+                    {
+                        // no puede escribir ni leer
                     }
                 }
             }
