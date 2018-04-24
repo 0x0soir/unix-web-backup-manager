@@ -228,7 +228,8 @@ class Backups_Controller extends Base_Controller {
                             mkdir(DIRECTORY_TARGET_BACKUPS.'/'.$script->id, 0777, true);
                         }
 
-                        $target_compress_data = new PharData(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
+                        $target_file = md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time());
+                        $target_compress_data = new PharData(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
 
                         try {
                             foreach ($innerIterator as $directory)
@@ -259,13 +260,19 @@ class Backups_Controller extends Base_Controller {
                             // save backup tar gz
                             $target_compress_data->compress(Phar::GZ);
 
-                            if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar'))
+                            if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'))
                             {
-                                BackupLog::new_log($script->id, 'Copia de seguridad generada '.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()));
+                                BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file);
+                                BackupFile::new_file($script->id, $target_file.'.tar');
                             }
                             else
                             {
-                                BackupLog::new_log($script->id, 'No se ha podido generar la copia '.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()));
+                                BackupLog::new_log($script->id, 'No se ha podido generar la copia '.$target_file);
+                            }
+
+                            if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'))
+                            {
+                                BackupFile::new_file($script->id, $target_file.'.tar.gz');
                             }
                         }
                         catch (Exception $e)

@@ -79,4 +79,15 @@ CREATE TABLE backup_logs(
   CONSTRAINT `FK_pk_backup_logs_backup` FOREIGN KEY (`backup_id`) REFERENCES `backups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS backup_files;
+
+CREATE TABLE backup_files(
+  id int not null primary key auto_increment,
+  backup_id int(11) NOT NULL,
+  url varchar(300),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT `FK_pk_backup_files_backup` FOREIGN KEY (`backup_id`) REFERENCES `backups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 SET foreign_key_checks = 1;
