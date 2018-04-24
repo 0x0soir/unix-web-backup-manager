@@ -40,13 +40,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="form-group col-6">
+        <div class="form-group col-12">
             <label for="message-text" class="col-form-label"><span data-feather="folder"></span> Directorio origen:</label>
             <input size="16" name="source_directory" type="text" value="<?= isset($backup_info) ? $backup_info->source_directory : '' ?>" class="form-control" placeholder="Haga click para ver los directorios disponibles" readonly>
-        </div>
-        <div class="form-group col-6">
-            <label for="message-text" class="col-form-label"><span data-feather="folder"></span> Directorio destino:</label>
-            <input size="16" name="target_directory" type="text" value="<?= isset($backup_info) ? $backup_info->target_directory : '' ?>" class="form-control">
         </div>
     </div>
     <div class="row">

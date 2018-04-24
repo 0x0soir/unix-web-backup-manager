@@ -13,3 +13,5 @@ define('DEFAULT_URL', "/".BASE_CONTROLLER."/".BASE_ACTION);
 define('ALLOWED_OPERATING_SYSTEM', array('Linux'));
 
 define('BASE_DIRECTORY_NEW_SCRIPT', '/home');
+
+define('DIRECTORY_TARGET_BACKUPS', '/home/soir/Documentos/comprimidos');

@@ -58,7 +58,6 @@ CREATE TABLE `backups` (
   `start_date` DATETIME NOT NULL,
   `end_date` DATETIME NOT NULL,
   `source_directory` varchar(4351) NOT NULL,
-  `target_directory` varchar(4096) NOT NULL,
   `excluded_extensions` text NOT NULL,
   `excluded_directories` text NOT NULL,
   `cronjob` VARCHAR(4096) NOT NULL,

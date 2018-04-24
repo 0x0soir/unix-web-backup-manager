@@ -63,7 +63,6 @@ class Backups_Controller extends Base_Controller {
             $backup->start_date             = $this->load->post_value('start_date');
             $backup->end_date               = $this->load->post_value('end_date');
             $backup->source_directory       = $this->load->post_value('source_directory');
-            $backup->target_directory       = $this->load->post_value('target_directory');
             $backup->excluded_extensions    = $this->load->post_value('excluded_extensions');
             $backup->excluded_directories   = $this->load->post_value('excluded_directories');
 
@@ -207,16 +206,15 @@ class Backups_Controller extends Base_Controller {
             if ($script)
             {
                 // check if can write destiny
-                if ($script->target_directory)
+                if ($script->source_directory)
                 {
                     $source_directory = realpath(trim($script->source_directory));
-                    $target_directory = realpath(trim($script->target_directory));
                     $excluded_extensions = explode(" ", $script->excluded_extensions);
                     $excluded_extensions = array_map('strtolower', $excluded_extensions);
                     $excluded_directories = explode(" ", $script->excluded_directories);
                     $excluded_directories = array_map('strtolower', $excluded_directories);
 
-                    if (is_dir($source_directory) && is_readable($source_directory) && is_dir($target_directory))
+                    if (is_dir($source_directory) && is_readable($source_directory) && is_dir(DIRECTORY_TARGET_BACKUPS) && is_writable(DIRECTORY_TARGET_BACKUPS))
                     {
                         $filter = function ($file, $key, $iterator) use ($source_directory, $excluded_directories) {
                             // --> ignore dirs
@@ -248,7 +246,7 @@ class Backups_Controller extends Base_Controller {
                         );
 
                         // do backup
-                        $target_compress_data = new PharData($script->target_directory.'/holi_'.md5($script->target_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
+                        $target_compress_data = new PharData(DIRECTORY_TARGET_BACKUPS.'/holi_'.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
 
                         try {
                             foreach ($iterator as $directory)
