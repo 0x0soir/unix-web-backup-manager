@@ -299,7 +299,6 @@ class Backups_Controller extends Base_Controller {
             {
                 if ($this->cronjob_check_exists($id))
                 {
-                    echo "existe";
                     $actual_crons = shell_exec('crontab -l');
                     file_put_contents('/tmp/crontab.txt', $actual_crons.PHP_EOL);
 
