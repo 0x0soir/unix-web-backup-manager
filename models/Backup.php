@@ -90,15 +90,6 @@ class Backup extends ActiveRecord\Model
             $cron_string['week_days'] = '*';
         }
 
-        if (trim($cronjob['cron_command']) != NULL)
-        {
-            $cron_string['command'] = $cronjob['cron_command'];
-        }
-        else
-        {
-            return NULL;
-        }
-
         return implode(' ', $cron_string);
     }
 
@@ -195,5 +186,15 @@ class Backup extends ActiveRecord\Model
         }
 
         return array();
+    }
+
+    public function get_custom_cronjob()
+    {
+        if ($this->cronjob != NULL)
+        {
+            return $this->cronjob." /usr/bin/wget -q ".WEBSITE_HOST."backups/cronjob/".$this->id." # TFG Admin Script ".$this->id;
+        }
+
+        return NULL;
     }
 }

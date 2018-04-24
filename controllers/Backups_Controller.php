@@ -72,7 +72,6 @@ class Backups_Controller extends Base_Controller {
                 'cron_days'         => $this->load->post_value('selectDays'),
                 'cron_months'       => $this->load->post_value('selectMonths'),
                 'cron_week_days'    => $this->load->post_value('selectWeekDays'),
-                'cron_command'      => 'test'
             );
 
             if (($backup->type <=> 3) && ($backup->state <=> 3))
@@ -99,6 +98,7 @@ class Backups_Controller extends Base_Controller {
                             if (intval($backup_id) > 0)
                             {
                                 $this->load->new_notification('Se han actualizado los datos correctamente.', 'success');
+                                $this->cronjob_add($backup_id);
                             }
                             else
                             {
@@ -216,43 +216,36 @@ class Backups_Controller extends Base_Controller {
 
                     if (is_dir($source_directory) && is_readable($source_directory) && is_dir(DIRECTORY_TARGET_BACKUPS) && is_writable(DIRECTORY_TARGET_BACKUPS))
                     {
-                        $filter = function ($file, $key, $iterator) use ($source_directory, $excluded_directories) {
-                            // --> ignore dirs
-                            if ($iterator->isDir() && $iterator->hasChildren() && ! in_array($file->getFilename(), $excluded_directories))
-                            {
-                                return true;
-                            }
-                            if ($file->isFile())
-                            {
-                                $dir_parts = explode($source_directory, $file->getPath());
-                                $dir_parts = explode("/", $dir_parts[1]);
-                                $dir_parts = array_map('strtolower', $dir_parts);
+                        $path = realpath($source_directory);
 
-                                if (count(array_diff($dir_parts, $excluded_directories)) != count($dir_parts))
-                                {
-                                    return false;
-                                }
-                            }
-                            return $file->isFile();
-                        };
-
-                        $innerIterator = new RecursiveDirectoryIterator(
-                            $source_directory,
+                        $innerIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
+                            $path,
                             RecursiveDirectoryIterator::SKIP_DOTS
-                        );
-
-                        $iterator = new RecursiveIteratorIterator(
-                            new RecursiveCallbackFilterIterator($innerIterator, $filter)
-                        );
+                        ));
 
                         // do backup
-                        $target_compress_data = new PharData(DIRECTORY_TARGET_BACKUPS.'/holi_'.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
+                        if (!file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id)) {
+                            mkdir(DIRECTORY_TARGET_BACKUPS.'/'.$script->id, 0777, true);
+                        }
+
+                        $target_compress_data = new PharData(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar');
 
                         try {
-                            foreach ($iterator as $directory)
+                            foreach ($innerIterator as $directory)
                             {
                                 if ($directory->isFile())
                                 {
+                                    if (count($excluded_directories) > 1)
+                                    {
+                                        $dir_parts = explode($source_directory, $directory->getPath());
+                                        $dir_parts = explode("/", $dir_parts[1]);
+                                        $dir_parts = array_map('strtolower', $dir_parts);
+
+                                        if (count(array_diff($dir_parts, $excluded_directories)) != count($dir_parts))
+                                        {
+                                            continue;
+                                        }
+                                    }
                                     // --> ignore extensions
                                     if ( ! in_array(strtolower($directory->getExtension()), $excluded_extensions))
                                     {
@@ -265,6 +258,15 @@ class Backups_Controller extends Base_Controller {
 
                             // save backup tar gz
                             $target_compress_data->compress(Phar::GZ);
+
+                            if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()).'.tar'))
+                            {
+                                BackupLog::new_log($script->id, 'Copia de seguridad generada '.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()));
+                            }
+                            else
+                            {
+                                BackupLog::new_log($script->id, 'No se ha podido generar la copia '.md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time()));
+                            }
                         }
                         catch (Exception $e)
                         {
@@ -274,6 +276,7 @@ class Backups_Controller extends Base_Controller {
                     else
                     {
                         // no puede escribir ni leer
+                        echo "error";
                     }
                 }
             }
@@ -314,18 +317,18 @@ class Backups_Controller extends Base_Controller {
         }
     }
 
-    public function cronjob_get_all()
+    private function cronjob_get_all()
     {
         exec('crontab -l', $crontab);
         print_r($crontab);
     }
 
-    public function cronjob_remove_all()
+    private function cronjob_remove_all()
     {
         exec('crontab -r');
     }
 
-    public function cronjob_add($id){
+    private function cronjob_add($id){
         $id = intval($id);
         $cronjob_added = false;
 
@@ -356,7 +359,7 @@ class Backups_Controller extends Base_Controller {
         return $cronjob_added;
     }
 
-    public function cronjob_check_exists($id, $command = NULL)
+    private function cronjob_check_exists($id, $command = NULL)
     {
         $id = intval($id);
         $cronjob_exists = false;
