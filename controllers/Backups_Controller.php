@@ -98,7 +98,11 @@ class Backups_Controller extends Base_Controller {
                             if (intval($backup_id) > 0)
                             {
                                 $this->load->new_notification('Se han actualizado los datos correctamente.', 'success');
-                                $this->cronjob_add($backup_id);
+
+                                if ($this->check_operating_system(TRUE))
+                                {
+                                    $this->cronjob_add($backup_id);
+                                }
                             }
                             else
                             {
@@ -197,7 +201,7 @@ class Backups_Controller extends Base_Controller {
     {
         $id = intval($id);
 
-        if ($id > 0)
+        if (($id > 0) && $this->check_operating_system(TRUE))
         {
             // get script by id
             $script = Backup::find_by_id($id);
