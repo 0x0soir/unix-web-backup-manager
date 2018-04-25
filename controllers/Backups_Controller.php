@@ -307,15 +307,22 @@ class Backups_Controller extends Base_Controller {
                 if ($this->cronjob_check_exists($id))
                 {
                     $actual_crons = shell_exec('crontab -l');
+
                     file_put_contents('/tmp/crontab.txt', $actual_crons.PHP_EOL);
 
                     $tmp_contents = file('/tmp/crontab.txt', FILE_SKIP_EMPTY_LINES);
 
-                    $tmp_contents = str_replace($script->get_custom_cronjob(), '', $tmp_contents);
+                    foreach($tmp_contents as $key => $line) {
+                        if (strpos($line, '# TFG Admin Script '.$id) !== false) {
+                            unset($tmp_contents[$key]);
+                        }
+                    }
 
-                    $tmp_contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "", $tmp_contents);
+                    $cron_clean = implode(PHP_EOL, $tmp_contents);
 
-                    file_put_contents('/tmp/crontab.txt', $tmp_contents);
+                    $cron_clean = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "", $cron_clean);
+
+                    file_put_contents('/tmp/crontab.txt', $cron_clean);
 
                     exec('crontab /tmp/crontab.txt');
                 }
@@ -400,6 +407,7 @@ class Backups_Controller extends Base_Controller {
                 }
             }
         }
+
         return $cronjob_exists;
     }
 
