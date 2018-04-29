@@ -7,7 +7,7 @@ $this->load->view('_/header', array(
     <h1>Información de usuario</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group">
-        <a href="/Users/users" class="btn btn-sm btn-primary">Volver al listado</a>
+        <a href="/Users/users" class="btn btn-sm btn-primary"><span data-feather="skip-back"></span>Volver al listado</a>
       </div>
     </div>
 </div>
