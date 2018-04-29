@@ -9,6 +9,8 @@ CREATE TABLE users(
   password char(60),
   session char(60),
   last_login DATETIME,
+  max_size bigint(20) DEFAULT '0',
+  used_size bigint(20) DEFAULT '0',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
