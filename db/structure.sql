@@ -85,6 +85,7 @@ CREATE TABLE backup_files(
   id int not null primary key auto_increment,
   backup_id int(11) NOT NULL,
   url varchar(300),
+  type varchar(10),
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT `FK_pk_backup_files_backup` FOREIGN KEY (`backup_id`) REFERENCES `backups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION

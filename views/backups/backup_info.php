@@ -28,6 +28,27 @@ $this->load->view('_/header', array(
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <h3>Copias realizadas</h3>
+            </div>
+            <div class="card-block p-4">
+                <?php foreach($backup_files as $file): ?>
+                    <div class="row backup-file">
+                        <div class="col-1 backup-file-image">
+                            <img src="/assets/images/tar_archive_icon.png" />
+                        </div>
+                        <div class="col-11 backup-file-info">
+                            <h5>Formato: <?= $file->type ?></h5>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
                 <h3>Historial</h3>
             </div>
             <div class="card-block p-4">

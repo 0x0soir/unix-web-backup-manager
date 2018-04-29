@@ -383,3 +383,16 @@ a, a:hover {
 #loaded_directories table tbody td:first-child {
     color: #b5302d !important;
 }
+
+/* BACKUP INFO */
+.backup-file {
+    padding-top: 10px;
+}
+
+.backup-file-image img {
+    width: 100%;
+}
+
+.backup-file-info {
+    background-color: #F6F6F6;
+}
