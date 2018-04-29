@@ -32,6 +32,7 @@ class Backups_Controller extends Base_Controller {
 
             $data['backup_info']    = $backup;
             $data['backup_logs']    = BackupLog::find_all_by_backup_id($backup->id);
+            $data['backup_files']   = BackupFile::find_all_by_backup_id($backup->id);
 
             $this->load->view('backups/backup_info', $data);
         }
@@ -255,7 +256,6 @@ class Backups_Controller extends Base_Controller {
                                     if ( ! in_array(strtolower($directory->getExtension()), $excluded_extensions))
                                     {
                                         $target_compress_data->addFile($directory);
-                                        //echo "<br>NO SE IGNORA Fichero: ".$directory." ".$directory->getBaseName();
                                     }
 
                                 }
@@ -267,7 +267,7 @@ class Backups_Controller extends Base_Controller {
                             if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'))
                             {
                                 BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file);
-                                BackupFile::new_file($script->id, $target_file.'.tar');
+                                BackupFile::new_file($script->id, $target_file.'.tar', '.tar', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'));
                             }
                             else
                             {
@@ -276,7 +276,7 @@ class Backups_Controller extends Base_Controller {
 
                             if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'))
                             {
-                                BackupFile::new_file($script->id, $target_file.'.tar.gz');
+                                BackupFile::new_file($script->id, $target_file.'.tar.gz', '.tar.gz', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'));
                             }
                         }
                         catch (Exception $e)
@@ -415,4 +415,56 @@ class Backups_Controller extends Base_Controller {
         return $cronjob_exists;
     }
 
+    public function download_backup($backup_id, $backup_file_id)
+    {
+        // TODO: Comprobar que el fichero pertence al script y a la cuenta logeada
+        $script = Backup::find_by_id(intval($backup_id));
+
+        if ($script)
+        {
+            $backup_file = BackupFile::find_by_id($backup_file_id);
+
+            if ($backup_file)
+            {
+                $backup_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
+
+                if (file_exists($backup_file)) {
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.basename($backup_file).'"');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($backup_file));
+                    readfile($backup_file);
+                    exit;
+                }
+            }
+        }
+    }
+
+    public function remove_backup($backup_id, $backup_file_id)
+    {
+        // TODO: Comprobar que el fichero pertence al script y a la cuenta logeada
+        $script = Backup::find_by_id(intval($backup_id));
+
+        if ($script)
+        {
+            $backup_file = BackupFile::find_by_id($backup_file_id);
+
+            if ($backup_file)
+            {
+                $backup_real_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
+
+                if (file_exists($backup_real_file)) {
+                    if ($backup_file->delete())
+                    {
+                        unlink($backup_real_file);
+                    }
+                }
+            }
+        }
+
+        $this->load->redirect('backups/backups');
+    }
 }

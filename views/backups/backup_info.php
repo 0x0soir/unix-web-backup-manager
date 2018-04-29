@@ -34,10 +34,16 @@ $this->load->view('_/header', array(
                 <?php foreach($backup_files as $file): ?>
                     <div class="row backup-file">
                         <div class="col-1 backup-file-image">
-                            <img src="/assets/images/tar_archive_icon.png" />
+                            <img src="/assets/images/<?= str_replace('.', '_', $file->type) ?>_archive_icon.png" />
                         </div>
-                        <div class="col-11 backup-file-info">
-                            <h5>Formato: <?= $file->type ?></h5>
+                        <div class="col-9 backup-file-info">
+                            <h5>Extensión del fichero: <?= $file->type ?></h5>
+                            <h5>Fecha de generación: <?= $file->created_at ?></h5>
+                            <h5>Tamaño: <?= get_bytes_correct_format($file->size) ?></h5>
+                        </div>
+                        <div class="col-2 backup-file-links">
+                            <a href="<?= $file->download_link() ?>" class="btn btn-sm btn-block btn-success"><span data-feather="download"></span> Descargar</a>
+                            <a href="<?= $file->remove_link() ?>" class="btn btn-sm btn-block btn-danger"><span data-feather="delete"></span> Descargar</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

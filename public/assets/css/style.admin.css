@@ -396,3 +396,11 @@ a, a:hover {
 .backup-file-info {
     background-color: #F6F6F6;
 }
+
+.backup-file-links {
+    background-color: #F6F6F6;
+}
+
+.backup-file-links a:first-child {
+    margin-top: 14px;
+}
