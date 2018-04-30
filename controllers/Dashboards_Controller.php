@@ -24,6 +24,8 @@ class Dashboards_Controller extends Base_Controller {
             }
         }
 
+        $data['size_percent'] = ($data['used_size'] / $data['max_size']) * 100;
+
         $this->load->view('dashboards/index', $data);
     }
 

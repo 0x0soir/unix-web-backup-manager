@@ -45,6 +45,21 @@ $this->load->view('_/header', array(
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="pull-left">Tamaño disponible</h3>
+            </div>
+            <div class="card-body">
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: <?= $size_percent ?>%;" aria-valuenow="<?= $size_percent ?>" aria-valuemin="0" aria-valuemax="100"><?= round($size_percent) ?>%</div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= 100-$size_percent ?>%" aria-valuenow="<?= round(100-$size_percent) ?>" aria-valuemin="0" aria-valuemax="100"><?= round(100-$size_percent) ?>%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 $this->load->view('_/footer', array());
 ?>
