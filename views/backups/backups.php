@@ -1,6 +1,6 @@
 <?php
 $this->load->view('_/header', array(
-    'menu_active' => 'backups_scripts'
+    'menu_active' => 'backups_backups'
 ));
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-4 mb-3 main_section_header">
@@ -11,44 +11,35 @@ $this->load->view('_/header', array(
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="pull-left">Listado de tareas programadas (Propias)</h3>
-                <div class="pull-right btn-group">
-                    <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target=".new_backup_modal"><span data-feather="plus"></span> Añadir</button>
-                    <button class="btn btn-sm btn-outline-secondary"><span data-feather="pause"></span> Pausar todos</button>
-                    <button class="btn btn-sm btn-outline-secondary"><span data-feather="refresh-ccw"></span> Reanudar todos</button>
-                </div>
+                <h3 class="pull-left">Listado de copias de seguridad (Propias)</h3>
             </div>
             <div class="card-block p-4">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Tipo</th>
-                                <th>Estado</th>
-                                <th>Fecha de inicio</th>
-                                <th>Fecha de fin</th>
-                                <th class="text-center"><span data-feather="file"></span> Directorio</th>
-                                <th class="text-right">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($backups as $backup): ?>
-                                <tr>
-                                    <td><?= $backup->id ?></td>
-                                    <td><?= $backup->get_type_text() ?></td>
-                                    <td><?= $backup->get_state_text() ?></td>
-                                    <td><?= get_real_date($backup->start_date)?></td>
-                                    <td><?= get_real_date($backup->end_date) ?></td>
-                                    <td><?= $backup->source_directory ?></td>
-                                    <td align="right" class="p-0 pt-1">
-                                        <a href="/Backups/backup/<?= $backup->id ?>" class="btn btn-primary btn-sm">Información</a>
-                                        <a href="/Backups/backup_delete/<?= $backup->id ?>" class="btn btn-danger btn-sm">Eliminar</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div class="col-12">
+                    <?php if (isset($backup_files) && (count($backup_files) > 0)): ?>
+                        <?php foreach($backup_files as $file): ?>
+                            <div class="row backup-file">
+                                <div class="col-1 backup-file-image">
+                                    <img src="/assets/images/<?= str_replace('.', '_', $file->type) ?>_archive_icon.png" />
+                                </div>
+                                <div class="col-9 backup-file-info">
+                                    <h5>Extensión del fichero: <?= $file->type ?></h5>
+                                    <h5>Fecha de generación: <?= $file->created_at ?></h5>
+                                    <h5>Tamaño: <?= get_bytes_correct_format($file->size) ?></h5>
+                                </div>
+                                <div class="col-2 backup-file-links">
+                                    <a href="<?= $file->download_link() ?>" class="btn btn-sm btn-block btn-success"><span data-feather="download"></span> Descargar</a>
+                                    <a href="<?= $file->remove_link() ?>" class="btn btn-sm btn-block btn-danger"><span data-feather="delete"></span> Eliminar</a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="card text-white bg-danger">
+                          <div class="card-body">
+                            <h5 class="card-title">¡Aviso!</h5>
+                            <p class="card-text">Actualmente no existen ficheros generados por ninguna copia de seguridad..</p>
+                          </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

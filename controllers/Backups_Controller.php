@@ -10,16 +10,36 @@ class Backups_Controller extends Base_Controller {
 
     public function index()
     {
-        $this->load->redirect('backups/backups');
+        $this->load->redirect('backups/scripts');
     }
 
     public function backups()
     {
         $data = array();
 
-        $data['backups'] = Backup::find_all_by_user_id($this->auth->get_actual_user()->id);
+        $scripts = Backup::find_all_by_user_id(get_actual_user()->id);
+
+        $backup_files = array();
+
+        if (count($scripts) > 0)
+        {
+            foreach ($scripts as $script) {
+                $backup_files = $backup_files + BackupFile::find_all_by_backup_id($script->id);
+            }
+        }
+
+        $data['backup_files'] = $backup_files;
 
         $this->load->view('backups/backups', $data);
+    }
+
+    public function scripts()
+    {
+        $data = array();
+
+        $data['scripts'] = Backup::find_all_by_user_id($this->auth->get_actual_user()->id);
+
+        $this->load->view('backups/scripts', $data);
     }
 
     public function backup($backup_id)
@@ -38,7 +58,7 @@ class Backups_Controller extends Base_Controller {
         }
         else
         {
-            $this->load->redirect("Backups/backups");
+            $this->load->redirect("Backups/scripts");
             exit;
         }
     }
@@ -465,6 +485,6 @@ class Backups_Controller extends Base_Controller {
             }
         }
 
-        $this->load->redirect('backups/backups');
+        $this->load->redirect('backups/scripts');
     }
 }

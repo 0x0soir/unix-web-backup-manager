@@ -11,13 +11,13 @@ $menu = array(
 $backups_menu = array(
     array(
         'id' => 'backups_backups',
-        'url' => '/Backups/backups_data',
+        'url' => '/Backups/backups',
         'icon' => 'layers',
         'label' => 'Realizados'
     ),
     array(
         'id' => 'backups_scripts',
-        'url' => '/Backups/backups',
+        'url' => '/Backups/scripts',
         'icon' => 'clock',
         'label' => 'Programados'
     )

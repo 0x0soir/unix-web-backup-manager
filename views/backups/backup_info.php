@@ -7,7 +7,7 @@ $this->load->view('_/header', array(
     <h1>Información del backup</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group">
-        <a href="/Backups/backups" class="btn btn-sm btn-primary"><span data-feather="skip-back"></span> Volver al listado</a>
+        <a href="/Backups/scripts" class="btn btn-sm btn-primary"><span data-feather="skip-back"></span> Volver al listado</a>
       </div>
     </div>
 </div>
@@ -44,7 +44,7 @@ $this->load->view('_/header', array(
                             </div>
                             <div class="col-2 backup-file-links">
                                 <a href="<?= $file->download_link() ?>" class="btn btn-sm btn-block btn-success"><span data-feather="download"></span> Descargar</a>
-                                <a href="<?= $file->remove_link() ?>" class="btn btn-sm btn-block btn-danger"><span data-feather="delete"></span> Descargar</a>
+                                <a href="<?= $file->remove_link() ?>" class="btn btn-sm btn-block btn-danger"><span data-feather="delete"></span> Eliminar</a>
                             </div>
                         </div>
                     <?php endforeach; ?>
