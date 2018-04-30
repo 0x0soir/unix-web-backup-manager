@@ -18,6 +18,10 @@ class Backup extends ActiveRecord\Model
         array('user'),
     );
 
+    static $has_many = array(
+		array('backup_files')
+    );
+
     /*
     *   Public Methods
     */
