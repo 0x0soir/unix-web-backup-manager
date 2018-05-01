@@ -76,15 +76,20 @@ $admin_menu = array(
             <span>Últimos backups</span>
         </h6>
         <ul class="nav flex-column mb-2">
-            <?php foreach (get_last_backups() as $backup): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $backup->download_link() ?>" style="background-color: #f0f0f0;margin:5px;">
-                        <span class="badge badge-secondary" style="max-width:70%; text-overflow: ellipsis;overflow:hidden;" data-toggle="tooltip" data-placement="top" title="<?= $backup->backup->source_directory ?>"><?= $backup->backup->source_directory ?></span>
-                        <span class="badge badge-info pull-right"><?= $backup->type ?></span>
-                        <span class="badge badge-success" style="width:100%;margin-top:5px;"><?= $backup->created_at ?></span>
-                    </a>
-                </li>
-            <?php endforeach; ?>
+            <?php $last_backups = get_last_backups(); ?>
+            <?php if (count($last_backups) > 0): ?>
+                <?php foreach (get_last_backups() as $backup): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $backup->download_link() ?>" style="background-color: #f0f0f0;margin:5px;">
+                            <span class="badge badge-secondary" style="max-width:70%; text-overflow: ellipsis;overflow:hidden;" data-toggle="tooltip" data-placement="top" title="<?= $backup->backup->source_directory ?>"><?= $backup->backup->source_directory ?></span>
+                            <span class="badge badge-info pull-right"><?= $backup->type ?></span>
+                            <span class="badge badge-success" style="width:100%;margin-top:5px;"><?= $backup->created_at ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <span class="badge badge-info" style="margin:5px;">No existen backups recientes.</span>
+            <?php endif; ?>
         </ul>
     </div>
 </nav>
