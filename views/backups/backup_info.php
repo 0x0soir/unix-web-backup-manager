@@ -8,6 +8,7 @@ $this->load->view('_/header', array(
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group">
         <a href="/Backups/scripts" class="btn btn-sm btn-primary"><span data-feather="skip-back"></span> Volver al listado</a>
+        <a href="/Backups/do_backup/<?= $backup_info->id ?>" class="btn btn-sm btn-success"><span data-feather="play"></span> Ejecutar ahora</a>
       </div>
     </div>
 </div>

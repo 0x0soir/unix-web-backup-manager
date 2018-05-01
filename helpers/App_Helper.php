@@ -65,7 +65,7 @@ function get_real_date($datetime)
     return $datetime->format('d/m/Y H:i');
 }
 
-function get_last_backups()
+function get_last_backups($limit = 7)
 {
     $scripts = Backup::find_all_by_user_id(get_actual_user()->id);
 
@@ -74,9 +74,35 @@ function get_last_backups()
     if (count($scripts) > 0)
     {
         foreach ($scripts as $script) {
-            $backup_files = $backup_files + BackupFile::find_all_by_backup_id($script->id, array('order' => 'id desc'));
+            $backup_files = $backup_files + BackupFile::find_all_by_backup_id($script->id, array('order' => 'id desc', 'limit' => $limit));
         }
     }
 
     return $backup_files;
+}
+
+function get_all_scripts_id()
+{
+    $scripts = Backup::find_all_by_user_id(get_actual_user()->id);
+
+    $ids = array();
+
+    foreach ($scripts as $script)
+    {
+        array_push($ids, $script->id);
+    }
+
+    return $ids;
+}
+
+function check_available_space($user, $needed)
+{
+    if (($user->used_size + $needed) > $user->max_size)
+    {
+        return FALSE;
+    }
+    else
+    {
+        return TRUE;
+    }
 }

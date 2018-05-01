@@ -61,6 +61,19 @@ class Backups_Controller extends Base_Controller {
         }
     }
 
+    public function do_backup($backup_id)
+    {
+        $backup = Backup::find_by_id(intval($backup_id));
+
+        if ($backup)
+        {
+            $this->cronjob($backup_id);
+        }
+
+        $this->load->redirect("Backups/backup/".$backup_id);
+        exit;
+    }
+
     public function backup_save($backup_id = NULL)
     {
         if (intval($backup_id) > 0)
@@ -284,55 +297,53 @@ class Backups_Controller extends Base_Controller {
 
                             $user = User::find_by_id($script->user_id);
 
-                            $files = array();
+                            $files = array('.tar', '.tar.gz');
 
-                            if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'))
+                            $files_done = array();
+
+                            foreach ($files as $file)
                             {
-                                BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file.'.tar');
-                                $backup_tar_file = BackupFile::new_file($script->id, $target_file.'.tar', '.tar', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'));
+                                $file_url = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.$file;
 
-                                $user->used_size = $user->used_size + filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
-                                $user->save();
+                                if (file_exists($file_url))
+                                {
+                                    if (check_available_space($user, filesize($file_url)))
+                                    {
+                                        BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file.$file);
+                                        $backup_tar_file = BackupFile::new_file($script->id, $target_file.$file, $file, filesize($file_url));
 
-                                $files[] = array(
-                                    'extension'     => '.tar',
-                                    'directory'     => $source_directory,
-                                    'size'          => filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'),
-                                    'link'          => $backup_tar_file->download_link()
+                                        $user->used_size = $user->used_size + filesize($file_url);
+                                        $user->save();
+
+                                        $files_done[] = array(
+                                            'extension'     => $file,
+                                            'directory'     => $source_directory,
+                                            'size'          => filesize($file_url),
+                                            'link'          => $backup_tar_file->download_link()
+                                        );
+                                    }
+                                    else
+                                    {
+                                        $this->_send_space_error_message($user, $script);
+                                        unset($file_url);
+                                    }
+                                }
+                                else
+                                {
+                                    BackupLog::new_log($script->id, 'No se ha podido generar la copia '.$target_file.$file);
+                                }
+                            }
+
+                            if (count($files_done) > 0)
+                            {
+                                $mail_data = array(
+                                    'files'         => $files_done,
+                                    'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
                                 );
+
+                                $html_mail = $this->load->view('email/backup', $mail_data, TRUE);
+                                $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:s'), $html_mail);
                             }
-                            else
-                            {
-                                BackupLog::new_log($script->id, 'No se ha podido generar la copia '.$target_file.'.tar');
-                            }
-
-                            if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'))
-                            {
-                                BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file.'.tar.gz');
-                                $backup_tar_gz_file = BackupFile::new_file($script->id, $target_file.'.tar.gz', '.tar.gz', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'));
-
-                                $user->used_size = $user->used_size + filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz');
-                                $user->save();
-
-                                $files[] = array(
-                                    'extension'     => '.tar.gz',
-                                    'directory'     => $source_directory,
-                                    'size'          => filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'),
-                                    'link'          => $backup_tar_file->download_link()
-                                );
-                            }
-                            else
-                            {
-                                BackupLog::new_log($script->id, 'No se ha podido generar la copia '.$target_file.'.tar.gz');
-                            }
-
-                            $mail_data = array(
-                                'files'         => $files,
-                                'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
-                            );
-
-                            $html_mail = $this->load->view('email/backup', $mail_data, TRUE);
-                            $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:m'), $html_mail);
                         }
                         catch (Exception $e)
                         {
@@ -341,16 +352,26 @@ class Backups_Controller extends Base_Controller {
                     }
                     else
                     {
-                        // no puede escribir ni leer
                         echo "error";
                     }
                 }
             }
 
-            // insert into historic data
             // generate rsa protection
             // send email with key to user
         }
+    }
+
+    private function _send_space_error_message($user, $script)
+    {
+        BackupLog::new_log($script->id, 'Error: No tienes espacio suficiente para almacenar esta copia.');
+
+        $mail_data = array(
+            'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
+        );
+
+        $html_mail = $this->load->view('email/backup_no_space', $mail_data, TRUE);
+        $this->send_mail($user->email, '(!) Espacio insuficiente', $html_mail);
     }
 
     public function cronjob_delete($id)
