@@ -404,3 +404,8 @@ a, a:hover {
 .backup-file-links a:first-child {
     margin-top: 14px;
 }
+
+.progress{
+    height: 2rem;
+    font-size: 1.3rem;
+}

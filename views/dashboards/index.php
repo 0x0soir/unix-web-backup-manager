@@ -53,8 +53,12 @@ $this->load->view('_/header', array(
             </div>
             <div class="card-body">
                 <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: <?= $size_percent ?>%;" aria-valuenow="<?= $size_percent ?>" aria-valuemin="0" aria-valuemax="100"><?= round($size_percent) ?>%</div>
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= 100-$size_percent ?>%" aria-valuenow="<?= round(100-$size_percent) ?>" aria-valuemin="0" aria-valuemax="100"><?= round(100-$size_percent) ?>%</div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $size_percent ?>%;" aria-valuenow="<?= $size_percent ?>" aria-valuemin="0" aria-valuemax="100">
+                        <?= round($size_percent) ?>%
+                    </div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: <?= 100-$size_percent ?>%" aria-valuenow="<?= round(100-$size_percent) ?>" aria-valuemin="0" aria-valuemax="100">
+                        <?= round(100-$size_percent) ?>%
+                    </div>
                 </div>
             </div>
         </div>

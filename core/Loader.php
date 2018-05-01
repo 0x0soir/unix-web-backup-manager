@@ -9,7 +9,7 @@ class Loader {
     {
     }
 
-    function view($view, $data = array())
+    function view($view, $data = array(), $to_variable = FALSE)
     {
         foreach ($data as $id_assoc => $value)
         {
@@ -18,7 +18,18 @@ class Loader {
 
         $this->load = $this;
 
-        require_once(BASE_PATH.'/views/'.$view.'.php');
+        if ($to_variable)
+        {
+            ob_start();
+            include(BASE_PATH.'/views/'.$view.'.php');
+            $content = ob_get_contents();
+			@ob_end_clean();
+			return $content;
+        }
+        else
+        {
+            require_once(BASE_PATH.'/views/'.$view.'.php');
+        }
     }
 
     function redirect($url = NULL)

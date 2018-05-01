@@ -284,13 +284,22 @@ class Backups_Controller extends Base_Controller {
 
                             $user = User::find_by_id($script->user_id);
 
+                            $files = array();
+
                             if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'))
                             {
                                 BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file.'.tar');
-                                BackupFile::new_file($script->id, $target_file.'.tar', '.tar', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'));
+                                $backup_tar_file = BackupFile::new_file($script->id, $target_file.'.tar', '.tar', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'));
 
                                 $user->used_size = $user->used_size + filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
                                 $user->save();
+
+                                $files[] = array(
+                                    'extension'     => '.tar',
+                                    'directory'     => $source_directory,
+                                    'size'          => filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar'),
+                                    'link'          => $backup_tar_file->download_link()
+                                );
                             }
                             else
                             {
@@ -300,15 +309,30 @@ class Backups_Controller extends Base_Controller {
                             if (file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'))
                             {
                                 BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file.'.tar.gz');
-                                BackupFile::new_file($script->id, $target_file.'.tar.gz', '.tar.gz', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'));
+                                $backup_tar_gz_file = BackupFile::new_file($script->id, $target_file.'.tar.gz', '.tar.gz', filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'));
 
                                 $user->used_size = $user->used_size + filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz');
                                 $user->save();
+
+                                $files[] = array(
+                                    'extension'     => '.tar.gz',
+                                    'directory'     => $source_directory,
+                                    'size'          => filesize(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar.gz'),
+                                    'link'          => $backup_tar_file->download_link()
+                                );
                             }
                             else
                             {
                                 BackupLog::new_log($script->id, 'No se ha podido generar la copia '.$target_file.'.tar.gz');
                             }
+
+                            $mail_data = array(
+                                'files'         => $files,
+                                'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
+                            );
+
+                            $html_mail = $this->load->view('email/backup', $mail_data, TRUE);
+                            $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:m'), $html_mail);
                         }
                         catch (Exception $e)
                         {
@@ -501,6 +525,6 @@ class Backups_Controller extends Base_Controller {
             }
         }
 
-        $this->load->redirect('backups/scripts');
+        $this->load->redirect('backups/backups');
     }
 }

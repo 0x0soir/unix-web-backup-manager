@@ -1,6 +1,8 @@
 <?php
 defined('BASE_PATH') OR exit('No direct script access allowed');
 
+require(BASE_PATH.'secrets.php');
+
 define('config_public_urls', array(
         '/users/index',
         '/users/login',

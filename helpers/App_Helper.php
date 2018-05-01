@@ -64,3 +64,19 @@ function get_real_date($datetime)
 {
     return $datetime->format('d/m/Y H:i');
 }
+
+function get_last_backups()
+{
+    $scripts = Backup::find_all_by_user_id(get_actual_user()->id);
+
+    $backup_files = array();
+
+    if (count($scripts) > 0)
+    {
+        foreach ($scripts as $script) {
+            $backup_files = $backup_files + BackupFile::find_all_by_backup_id($script->id);
+        }
+    }
+
+    return $backup_files;
+}

@@ -6,6 +6,9 @@ class Base_Controller {
     function __construct()
     {
         load_class('ActiveRecord', 'core', TRUE);
+        load_class('Exception', 'core/lib/PHPMailer', TRUE);
+        load_class('SMTP', 'core/lib/PHPMailer', TRUE);
+        load_class('PHPMailer', 'core/lib/PHPMailer', TRUE);
         load_active_record();
         load_config();
 
@@ -64,6 +67,34 @@ class Base_Controller {
             {
                 return TRUE;
             }
+        }
+    }
+
+    public function send_mail($to, $subject, $html)
+    {
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->IsSMTP();
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'ssl';
+        $mail->Host = SMTP_HOST;
+        $mail->Username = SMTP_FROM;
+        $mail->Password = SMTP_PASSWORD;
+        $mail->Port = 465;
+        $mail->From = SMTP_FROM;
+        $mail->FromName = "TFG BACKUPS";
+        $mail->AddAddress($to);
+        $mail->IsHTML(true);
+        $mail->CharSet = 'UTF-8';
+        $mail->Subject = $subject;
+        $mail->Body = $html;
+
+        if ($mail->Send()){
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
         }
     }
 
