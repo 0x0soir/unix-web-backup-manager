@@ -74,7 +74,7 @@ function get_last_backups()
     if (count($scripts) > 0)
     {
         foreach ($scripts as $script) {
-            $backup_files = $backup_files + BackupFile::find_all_by_backup_id($script->id);
+            $backup_files = $backup_files + BackupFile::find_all_by_backup_id($script->id, array('order' => 'id desc'));
         }
     }
 
