@@ -22,9 +22,12 @@ class Dashboards_Controller extends Base_Controller {
             foreach ($data['scripts'] as $script) {
                 $data['backups'] += count(BackupFile::find_all_by_backup_id($script->id));
             }
+
+            $data['chart_last_days'] = $this->_generate_statistics_last_days(7);
         }
 
         $data['size_percent'] = (get_actual_user()->used_size / get_actual_user()->max_size) * 100;
+
 
         $this->load->view('dashboards/index', $data);
     }
@@ -32,5 +35,41 @@ class Dashboards_Controller extends Base_Controller {
     public function login()
     {
         $this->load->view('login', array());
+    }
+
+    private function _generate_statistics_last_days($days)
+    {
+        $format = 'Y-m-d';
+        $m  = date("m");
+        $de = date("d");
+        $y  = date("Y");
+        $dateArray = array();
+        for($i=0; $i<=$days-1; $i++){
+            $dateArray[] = '' . date($format, mktime(0,0,0,$m,($de-$i),$y)) . '';
+        }
+
+        $dateArray = array_reverse($dateArray);
+
+        $used_sizes = array();
+        $backups_count = array();
+
+        foreach ($dateArray as $date)
+        {
+            $day_size = 0;
+            $backups = BackupFile::find('all', array('conditions' => array('backup_id IN (?) AND created_at like ?', get_all_scripts_id(), $date.' %')));
+            foreach ($backups as $file)
+            {
+                $day_size += $file->size;
+            }
+
+            array_push($used_sizes, $day_size);
+            array_push($backups_count, count($backups));
+        }
+
+        return array(
+            'dates' => $dateArray,
+            'used_sizes' => $used_sizes,
+            'backups' => $backups_count
+        );
     }
 }

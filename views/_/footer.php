@@ -26,6 +26,10 @@
         <script src="/assets/js/backups/scripts.js"></script>
     <?php } ?>
 
+    <?php if (isset($js_charts) && $js_charts == TRUE) { ?>
+        <script src="/assets/js/charts/echarts.common.min.js"></script>
+    <?php } ?>
+
     <script type="text/javascript">
         $(function () {
             $(".form_datetime").datetimepicker({
