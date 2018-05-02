@@ -121,6 +121,7 @@ $this->load->view('_/header', array(
                             type: 'value',
                             name: 'Memoria usada',
                             min: 0,
+                            max: <?= round(max($chart_last_days['used_sizes'])+max($chart_last_days['used_sizes'])*20/100) ?>,
                             axisLabel: {
                                 formatter: '{value} bytes'
                             }
