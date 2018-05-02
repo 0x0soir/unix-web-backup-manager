@@ -62,6 +62,7 @@ CREATE TABLE `backups` (
   `source_directory` varchar(4351) NOT NULL,
   `excluded_extensions` text NOT NULL,
   `excluded_directories` text NOT NULL,
+  `download_password` char(60) NOT NULL,
   `cronjob` VARCHAR(4096) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

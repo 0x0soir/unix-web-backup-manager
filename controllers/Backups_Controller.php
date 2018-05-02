@@ -100,6 +100,16 @@ class Backups_Controller extends Base_Controller {
             $backup->source_directory       = $this->load->post_value('source_directory');
             $backup->excluded_extensions    = $this->load->post_value('excluded_extensions');
             $backup->excluded_directories   = $this->load->post_value('excluded_directories');
+            $download_password              = $this->load->post_value('download_password');
+
+            if (isset($download_password) && ( ! empty($download_password)) )
+            {
+                $hash_options = [
+                    'cost' => 6,
+                ];
+
+                $backup->download_password = password_hash($download_password, PASSWORD_BCRYPT, $hash_options);
+            }
 
             $cronjob = array(
                 'cron_hours'        => $this->load->post_value('selectHours'),
@@ -338,6 +348,36 @@ class Backups_Controller extends Base_Controller {
     }
 
     public function download_backup($backup_id, $backup_file_id)
+    {
+        $download_password = $this->load->post_value('download_password');
+
+        $script = Backup::find_by_id(intval($backup_id));
+
+        $backup_file = BackupFile::find_by_id(intval($backup_file_id));
+
+        if ($script && $backup_file)
+        {
+            if (isset($download_password) && (!empty($download_password)))
+            {
+                if (password_verify($download_password, $script->download_password))
+                {
+                    $this->real_download_backup($backup_id, $backup_file_id);
+                }
+            }
+            else
+            {
+                $data = array(
+                    'backup_id'         => $backup_id,
+                    'backup_file_id'    => $backup_file_id,
+                    'backup_name'       => $backup_file->url,
+                    'backup_date'       => $backup_file->created_at
+                );
+
+                $this->load->view('download', $data);
+            }
+        }
+    }
+    public function real_download_backup($backup_id, $backup_file_id)
     {
         // TODO: Comprobar que el fichero pertence al script y a la cuenta logeada
         $script = Backup::find_by_id(intval($backup_id));

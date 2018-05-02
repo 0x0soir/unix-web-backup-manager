@@ -114,5 +114,13 @@
             </select>
         </div>
     </div>
+    <hr>
+    <div class="row">
+        <div class="form-group col-12">
+            <label for="message-text" class="col-form-label"><span data-feather="password"></span> Contraseña de descarga:</label>
+            <input size="16" name="download_password" type="password" value="" class="form-control">
+            <small class="form-text text-muted">Rellenar únicamente si se desea actualizar la contraseña.</small>
+        </div>
+    </div>
     <?= isset($backup_info) ? '<button type="submit" class="btn btn-success">Actualizar datos</button>' : '' ?>
 </form>
