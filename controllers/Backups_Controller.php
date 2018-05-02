@@ -217,7 +217,7 @@ class Backups_Controller extends Base_Controller {
             if ($script)
             {
                 // check if can write destiny
-                if ($script->source_directory)
+                if (($script->source_directory) && ($script->state == 0))
                 {
                     $source_directory = realpath(trim($script->source_directory));
                     $excluded_extensions = explode(" ", $script->excluded_extensions);
@@ -394,7 +394,31 @@ class Backups_Controller extends Base_Controller {
 
         $this->load->redirect('backups/backups');
     }
-    
+
+    public function pause_all_scripts()
+    {
+        Backup::update_all(
+            array(
+                'set' => array('state' => '1'),
+                'conditions' => array('user_id' => get_actual_user()->id, 'state' => '0')
+            )
+        );
+
+        $this->load->redirect('backups/scripts');
+    }
+
+    public function play_all_scripts()
+    {
+        Backup::update_all(
+            array(
+                'set' => array('state' => '0'),
+                'conditions' => array('user_id' => get_actual_user()->id, 'state' => '1')
+            )
+        );
+
+        $this->load->redirect('backups/scripts');
+    }
+
     /*
     *   Private Methods
     */

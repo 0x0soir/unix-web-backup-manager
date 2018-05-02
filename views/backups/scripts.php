@@ -14,8 +14,8 @@ $this->load->view('_/header', array(
                 <h3 class="pull-left">Listado de tareas programadas (Propias)</h3>
                 <div class="pull-right btn-group">
                     <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target=".new_backup_modal"><span data-feather="plus"></span> Añadir</button>
-                    <button class="btn btn-sm btn-outline-secondary"><span data-feather="pause"></span> Pausar todos</button>
-                    <button class="btn btn-sm btn-outline-secondary"><span data-feather="refresh-ccw"></span> Reanudar todos</button>
+                    <a href="/Backups/pause_all_scripts" class="btn btn-sm btn-outline-secondary"><span data-feather="pause"></span> Pausar todos</a>
+                    <a href="/Backups/play_all_scripts" class="btn btn-sm btn-outline-secondary"><span data-feather="refresh-ccw"></span> Reanudar todos</a>
                 </div>
             </div>
             <div class="card-block p-4">
