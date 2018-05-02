@@ -8,6 +8,9 @@ class Backups_Controller extends Base_Controller {
         parent::__construct();
     }
 
+    /*
+    *   Public Methods
+    */
     public function index()
     {
         $this->load->redirect('backups/scripts');
@@ -181,34 +184,6 @@ class Backups_Controller extends Base_Controller {
         $this->backup(intval($backup_id));
     }
 
-    private function _get_directory_iterator_to_array(DirectoryIterator $iterator)
-    {
-        $result = array();
-
-        sleep(2);
-
-        foreach ($iterator as $key => $directory) {
-            if ($directory->isDot()) {
-                continue;
-            }
-
-            if ($directory->isDir() && $directory->getFilename()[0] != '.') {
-                array_push($result, array(
-                    'path'          => $directory->getPathname(),
-                    'name'          => $directory->getFilename(),
-                    'size'          => $directory->getSize(),
-                    'last_modify'   => $directory->getMTime()
-                ));
-            }
-        }
-
-        usort($result, function ($item_1, $item_2) {
-            return $item_2['last_modify'] <=> $item_1['last_modify'];
-        });
-
-        return $result;
-    }
-
     public function get_directories()
     {
         $target_dir = ! empty($this->load->post_value('target_dir')) ? $this->load->post_value('target_dir') : BASE_DIRECTORY_NEW_SCRIPT;
@@ -362,6 +337,95 @@ class Backups_Controller extends Base_Controller {
         }
     }
 
+    public function download_backup($backup_id, $backup_file_id)
+    {
+        // TODO: Comprobar que el fichero pertence al script y a la cuenta logeada
+        $script = Backup::find_by_id(intval($backup_id));
+
+        if ($script)
+        {
+            $backup_file = BackupFile::find_by_id($backup_file_id);
+
+            if ($backup_file)
+            {
+                $backup_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
+
+                if (file_exists($backup_file)) {
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.basename($backup_file).'"');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($backup_file));
+                    readfile($backup_file);
+                    exit;
+                }
+            }
+        }
+    }
+
+    public function remove_backup($backup_id, $backup_file_id)
+    {
+        // TODO: Comprobar que el fichero pertence al script y a la cuenta logeada
+        $script = Backup::find_by_id(intval($backup_id));
+
+        if ($script)
+        {
+            $backup_file = BackupFile::find_by_id($backup_file_id);
+
+            if ($backup_file)
+            {
+                $backup_real_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
+
+                if (file_exists($backup_real_file)) {
+                    $user = User::find_by_id($script->user_id);
+                    $user->used_size = $user->used_size - filesize($backup_real_file);
+                    if ($user->save())
+                    {
+                        if ($backup_file->delete())
+                        {
+                            unlink($backup_real_file);
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->load->redirect('backups/backups');
+    }
+    
+    /*
+    *   Private Methods
+    */
+    private function _get_directory_iterator_to_array(DirectoryIterator $iterator)
+    {
+        $result = array();
+
+        sleep(2);
+
+        foreach ($iterator as $key => $directory) {
+            if ($directory->isDot()) {
+                continue;
+            }
+
+            if ($directory->isDir() && $directory->getFilename()[0] != '.') {
+                array_push($result, array(
+                    'path'          => $directory->getPathname(),
+                    'name'          => $directory->getFilename(),
+                    'size'          => $directory->getSize(),
+                    'last_modify'   => $directory->getMTime()
+                ));
+            }
+        }
+
+        usort($result, function ($item_1, $item_2) {
+            return $item_2['last_modify'] <=> $item_1['last_modify'];
+        });
+
+        return $result;
+    }
+
     private function _send_space_error_message($user, $script)
     {
         BackupLog::new_log($script->id, 'Error: No tienes espacio suficiente para almacenar esta copia.');
@@ -374,7 +438,7 @@ class Backups_Controller extends Base_Controller {
         $this->send_mail($user->email, '(!) Espacio insuficiente', $html_mail);
     }
 
-    public function cronjob_delete($id)
+    private function cronjob_delete($id)
     {
         $id = intval($id);
 
@@ -491,61 +555,4 @@ class Backups_Controller extends Base_Controller {
         return $cronjob_exists;
     }
 
-    public function download_backup($backup_id, $backup_file_id)
-    {
-        // TODO: Comprobar que el fichero pertence al script y a la cuenta logeada
-        $script = Backup::find_by_id(intval($backup_id));
-
-        if ($script)
-        {
-            $backup_file = BackupFile::find_by_id($backup_file_id);
-
-            if ($backup_file)
-            {
-                $backup_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
-
-                if (file_exists($backup_file)) {
-                    header('Content-Description: File Transfer');
-                    header('Content-Type: application/octet-stream');
-                    header('Content-Disposition: attachment; filename="'.basename($backup_file).'"');
-                    header('Expires: 0');
-                    header('Cache-Control: must-revalidate');
-                    header('Pragma: public');
-                    header('Content-Length: ' . filesize($backup_file));
-                    readfile($backup_file);
-                    exit;
-                }
-            }
-        }
-    }
-
-    public function remove_backup($backup_id, $backup_file_id)
-    {
-        // TODO: Comprobar que el fichero pertence al script y a la cuenta logeada
-        $script = Backup::find_by_id(intval($backup_id));
-
-        if ($script)
-        {
-            $backup_file = BackupFile::find_by_id($backup_file_id);
-
-            if ($backup_file)
-            {
-                $backup_real_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
-
-                if (file_exists($backup_real_file)) {
-                    $user = User::find_by_id($script->user_id);
-                    $user->used_size = $user->used_size - filesize($backup_real_file);
-                    if ($user->save())
-                    {
-                        if ($backup_file->delete())
-                        {
-                            unlink($backup_real_file);
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->load->redirect('backups/backups');
-    }
 }
