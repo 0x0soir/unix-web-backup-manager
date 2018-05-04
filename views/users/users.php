@@ -33,7 +33,7 @@ $this->load->view('_/header', array(
                                     <td><?= $user->id ?></td>
                                     <td><?= $user->username ?></td>
                                     <td><?= $user->email ?></td>
-                                    <td><?= $user->last_login ? $user->last_login : 'Nunca' ?></td>
+                                    <td><?= $user->last_login ? $user->last_login->format('Y-m-d H:i:s') : 'Nunca' ?></td>
                                     <td align="center"><span class="badge badge-success"><?= count($user->backups) ?></span></td>
                                     <td align="center"><span class="badge badge-dark"><?= $user_backup_files_count[$user->id] ? $user_backup_files_count[$user->id] : '0' ?></span></td>
                                     <td align="right" class="p-0 pt-1">
