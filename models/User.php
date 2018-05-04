@@ -4,7 +4,9 @@ class User extends ActiveRecord\Model
 {
     static $has_many = array(
 		array('user_logs'),
-        array('user_perm_to_users')
+        array('user_perm_to_users'),
+        array('backups'),
+        array('backup_files', 'through' => array('backups')) ,
     );
 
     public static function check_permission($user_id, $permission)

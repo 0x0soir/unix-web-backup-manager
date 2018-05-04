@@ -17,7 +17,7 @@ class Users_Controller extends Base_Controller {
     {
         $username = $this->load->post_value('username');
         $pasword = $this->load->post_value('password');
-        
+
         $data = array(
             'loggin_status' => $this->auth->check_user_password($username, $pasword),
             'url'           => DEFAULT_URL
@@ -39,7 +39,29 @@ class Users_Controller extends Base_Controller {
     {
         $data = array();
 
-        $data['users'] = User::all();
+        $data['users'] = User::find('all', array(
+                'include' => array('backups' => array('backup_files'))
+            )
+        );
+
+        $user_backup_files_count = array();
+
+        foreach($data['users'] as $user)
+        {
+            foreach($user->backups as $backup)
+            {
+                if (array_key_exists($user->id, $user_backup_files_count))
+                {
+                    $user_backup_files_count[$user->id] += count($backup->backup_files);
+                }
+                else
+                {
+                    $user_backup_files_count[$user->id] = count($backup->backup_files);
+                }
+            }
+        }
+
+        $data['user_backup_files_count'] = $user_backup_files_count;
 
         $this->load->view('users/users', $data);
     }

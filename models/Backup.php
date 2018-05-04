@@ -3,9 +3,9 @@
 class Backup extends ActiveRecord\Model
 {
     private $types = array(
-        0 => 'Diario',
-        1 => 'Semanal',
-        2 => 'Mensual',
+        0 => '.tar',
+        1 => '.tar.gz',
+        2 => '.tar y .tar.gz',
     );
 
     private $states = array(

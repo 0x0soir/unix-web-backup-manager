@@ -277,12 +277,28 @@ class Backups_Controller extends Base_Controller {
                                 }
                             }
 
-                            // save backup tar gz
-                            $target_compress_data->compress(Phar::GZ);
-
                             $user = User::find_by_id($script->user_id);
 
-                            $files = array('.tar', '.tar.gz');
+                            if ($script->type == 0)
+                            {
+                                $files = array('.tar');
+                            }
+                            else if ($script->type == 1)
+                            {
+                                $files = array('.tar.gz');
+
+                                // save backup tar gz
+                                $target_compress_data->compress(Phar::GZ);
+
+                                unlink(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
+                            }
+                            else if ($script->type == 2)
+                            {
+                                $files = array('.tar', '.tar.gz');
+
+                                // save backup tar gz
+                                $target_compress_data->compress(Phar::GZ);
+                            }
 
                             $files_done = array();
 
