@@ -16,7 +16,13 @@ $this->load->view('_/header', array('NOT_INCLUDES' => TRUE));
                             <div class="card-body">
                                 <div class="loader" style="display: none;"></div>
                                 <form method="POST" action="/Backups/download_backup/<?= $backup_id ?>/<?= $backup_file_id ?>" class="needs-validation" novalidate="" name="download">
-                                    <?= $backup_name ?> (<?= $backup_date ?>)
+                                    <?php if (isset($error_message)): ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <?= $error_message ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <br><?= $backup_name ?>
+                                    <br><strong>Fecha:</strong> <?= $backup_date->format('Y-m-d H:i'); ?>
                                     <br><br>
                                     <div class="form-group">
                                         <label for="password" class="d-block">Contraseña

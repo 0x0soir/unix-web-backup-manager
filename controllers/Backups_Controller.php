@@ -371,6 +371,8 @@ class Backups_Controller extends Base_Controller {
 
         $backup_file = BackupFile::find_by_id(intval($backup_file_id));
 
+        $error_message = FALSE;
+
         if ($script && $backup_file)
         {
             if (isset($download_password) && (!empty($download_password)))
@@ -378,19 +380,23 @@ class Backups_Controller extends Base_Controller {
                 if (password_verify($download_password, $script->download_password))
                 {
                     $this->real_download_backup($backup_id, $backup_file_id);
+                    exit;
+                }
+                else
+                {
+                    $error_message = 'La contraseña es incorrecta.';
                 }
             }
-            else
-            {
-                $data = array(
-                    'backup_id'         => $backup_id,
-                    'backup_file_id'    => $backup_file_id,
-                    'backup_name'       => $backup_file->url,
-                    'backup_date'       => $backup_file->created_at
-                );
 
-                $this->load->view('download', $data);
-            }
+            $data = array(
+                'backup_id'         => $backup_id,
+                'backup_file_id'    => $backup_file_id,
+                'backup_name'       => $backup_file->url,
+                'backup_date'       => $backup_file->created_at,
+                'error_message'    => $error_message
+            );
+
+            $this->load->view('download', $data);
         }
     }
     public function real_download_backup($backup_id, $backup_file_id)
