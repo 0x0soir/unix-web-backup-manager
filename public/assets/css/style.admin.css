@@ -321,6 +321,10 @@ a, a:hover {
     text-transform: uppercase;
 }
 
+.sidebar .nav-item {
+    max-width: 100%;
+}
+
 /*
  * Main sections
  */
