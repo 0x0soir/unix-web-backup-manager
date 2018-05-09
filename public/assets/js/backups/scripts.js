@@ -24,7 +24,7 @@
 
                 if (data_json.status == 1) {
                     $('#loaded_directories tbody').html(decodeEntities(data_json.directories));
-                    feather.replace();
+                    //feather.replace();
 
                     $('#loaded_directories .actual_directory').text(data_json.actual_directory);
 

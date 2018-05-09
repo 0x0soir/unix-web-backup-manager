@@ -85,9 +85,22 @@ class Users_Controller extends Base_Controller {
         }
     }
 
-    public function user_save($user_id)
+    public function user_new()
     {
-        $user = User::find_by_id($user_id);
+        $this->load->view('users/new_user', array());
+    }
+
+    public function user_save($user_id = 0)
+    {
+        if (intval($user_id) > 0)
+        {
+            $user = User::find_by_id($user_id);
+        }
+        else
+        {
+            // Create
+            $user = new User();
+        }
 
         $hash_options = [
             'cost' => 6,
