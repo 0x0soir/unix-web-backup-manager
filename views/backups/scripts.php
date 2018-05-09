@@ -19,37 +19,46 @@ $this->load->view('_/header', array(
                 </div>
             </div>
             <div class="card-block p-4">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Tipo</th>
-                                <th>Estado</th>
-                                <th>Fecha de inicio</th>
-                                <th>Fecha de fin</th>
-                                <th class="text-center"><span data-feather="file"></span> Directorio</th>
-                                <th class="text-right">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($scripts as $backup): ?>
+                <?php if (isset($backup_files) && (count($backup_files) > 0)): ?>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td><?= $backup->id ?></td>
-                                    <td><?= $backup->get_type_text() ?></td>
-                                    <td><?= $backup->get_state_text() ?></td>
-                                    <td><?= get_real_date($backup->start_date)?></td>
-                                    <td><?= get_real_date($backup->end_date) ?></td>
-                                    <td><?= $backup->source_directory ?></td>
-                                    <td align="right" class="p-0 pt-1">
-                                        <a href="/Backups/backup/<?= $backup->id ?>" class="btn btn-primary btn-sm">Información</a>
-                                        <a href="/Backups/backup_delete/<?= $backup->id ?>" class="btn btn-danger btn-sm">Eliminar</a>
-                                    </td>
+                                    <th>#</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                    <th>Fecha de inicio</th>
+                                    <th>Fecha de fin</th>
+                                    <th class="text-center"><span data-feather="file"></span> Directorio</th>
+                                    <th class="text-right">Opciones</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                <?php foreach($scripts as $backup): ?>
+                                    <tr>
+                                        <td><?= $backup->id ?></td>
+                                        <td><?= $backup->get_type_text() ?></td>
+                                        <td><?= $backup->get_state_text() ?></td>
+                                        <td><?= get_real_date($backup->start_date)?></td>
+                                        <td><?= get_real_date($backup->end_date) ?></td>
+                                        <td><?= $backup->source_directory ?></td>
+                                        <td align="right" class="p-0 pt-1">
+                                            <a href="/Backups/backup/<?= $backup->id ?>" class="btn btn-primary btn-sm">Información</a>
+                                            <a href="/Backups/backup_delete/<?= $backup->id ?>" class="btn btn-danger btn-sm">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="card text-white bg-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">¡Aviso!</h5>
+                            <p class="card-text">Actualmente no existen scripts programados.</p>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

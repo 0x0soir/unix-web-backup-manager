@@ -36,7 +36,7 @@ $this->load->view('_/header', array(
                         <div class="card text-white bg-danger">
                           <div class="card-body">
                             <h5 class="card-title">¡Aviso!</h5>
-                            <p class="card-text">Actualmente no existen ficheros generados por ninguna copia de seguridad..</p>
+                            <p class="card-text">Actualmente no existen ficheros generados por ninguna copia de seguridad.</p>
                           </div>
                         </div>
                     <?php endif; ?>
