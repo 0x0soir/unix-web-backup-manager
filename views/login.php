@@ -14,7 +14,7 @@ $this->load->view('_/header', array('NOT_INCLUDES' => TRUE));
                                 <h2 class="text-center">Iniciar sesión</h2>
                             </div>
                             <div class="card-body">
-                                <div class="loader" style="display: none;"></div>
+                                <div id="login-loader" class="loader" style="display: none;"></div>
                                 <form method="POST" action="#" class="needs-validation" novalidate="" id="login_form">
                                     <div class="form-group">
                                         <label for="email">Usuario</label>

@@ -19,9 +19,12 @@
 
                     swal('¡Ops!', 'Se ha producido un error con tu usuario o contraseña.', 'error');
 
-                    $('#login_form').siblings('.loader').fadeOut('slow', function(){
-                        $('#login_form').fadeIn();
-                    });
+                    setTimeout(function(){
+                        $('#login_form').siblings('.loader').fadeOut('slow', function(){
+                            $('#login_form').fadeIn();
+                        });
+                    }, 500);
+
                 } else {
                     swal({
                         title: "¡Bien!",
