@@ -39,6 +39,12 @@ class Users_Controller extends Base_Controller {
     {
         $data = array();
 
+        if ( ! check_perm('ADMIN'))
+        {
+            $this->load->redirect();
+            exit;
+        }
+
         $data['users'] = User::find('all', array(
                 'include' => array('backups' => array('backup_files'))
             )
@@ -68,9 +74,16 @@ class Users_Controller extends Base_Controller {
 
     public function user($user_id)
     {
-        $user = User::find_by_id($user_id);
+        $user = User::find_by_id(intval($user_id));
+
         if ($user)
         {
+            if ((get_actual_user()->id != intval($user_id)) && ( ! check_perm('ADMIN')))
+            {
+                $this->load->redirect();
+                exit;
+            }
+
             $data = array();
 
             $data['user_info'] = $user;
@@ -90,6 +103,12 @@ class Users_Controller extends Base_Controller {
         $user = User::find_by_id($user_id);
         if ($user)
         {
+            if ((get_actual_user()->id != intval($user_id)) && ( ! check_perm('ADMIN')))
+            {
+                $this->load->redirect();
+                exit;
+            }
+
             $data = array();
 
             $data['user_info'] = $user;
@@ -105,7 +124,14 @@ class Users_Controller extends Base_Controller {
 
     public function user_new()
     {
-        $this->load->view('users/new_user', array());
+        if ( ! check_perm('ADMIN'))
+        {
+            exit;
+        }
+        else
+        {
+            $this->load->view('users/new_user', array());
+        }
     }
 
     public function user_save($user_id = 0)
@@ -113,10 +139,22 @@ class Users_Controller extends Base_Controller {
         if (intval($user_id) > 0)
         {
             $user = User::find_by_id($user_id);
+
+            if ((get_actual_user()->id != intval($user_id)) && ( ! check_perm('ADMIN')))
+            {
+                $this->load->redirect();
+                exit;
+            }
         }
         else
         {
             // Create
+            if ( ! check_perm('ADMIN') )
+            {
+                $this->load->redirect();
+                exit;
+            }
+
             $user = new User();
         }
 
@@ -161,6 +199,12 @@ class Users_Controller extends Base_Controller {
         if (intval($user_id) > 0)
         {
             $user = User::find_by_id($user_id);
+
+            if ((get_actual_user()->id != intval($user_id)) && ( ! check_perm('ADMIN')))
+            {
+                $this->load->redirect();
+                exit;
+            }
         }
 
         if ($user)
@@ -205,6 +249,12 @@ class Users_Controller extends Base_Controller {
 
         if ($user)
         {
+            if ( ! check_perm('ADMIN') )
+            {
+                $this->load->redirect();
+                exit;
+            }
+
             if ($user->id == $this->auth->get_actual_user()->id)
             {
                 $this->load->new_notification('No puedes eliminarte a ti mismo.', 'danger');
