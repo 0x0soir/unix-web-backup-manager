@@ -37,7 +37,10 @@ $this->load->view('_/header', array('NOT_INCLUDES' => TRUE));
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary btn-block" tabindex="4">Iniciar sesión</button>
+                                        <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="/Users/register" class="btn btn-warning btn-block">Registro de cuenta</a>
                                     </div>
                                 </form>
                             </div>

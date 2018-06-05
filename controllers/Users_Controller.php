@@ -13,6 +13,11 @@ class Users_Controller extends Base_Controller {
         $this->load->view('login', array());
     }
 
+    public function register()
+    {
+        $this->load->view('register', array());
+    }
+
     public function login()
     {
         $username = $this->load->post_value('username');
@@ -45,7 +50,7 @@ class Users_Controller extends Base_Controller {
             exit;
         }
 
-        $data['users'] = User::find('all', array(
+        $data['users'] = User::find_all_by_active(true, array(
                 'include' => array('backups' => array('backup_files'))
             )
         );
@@ -70,6 +75,21 @@ class Users_Controller extends Base_Controller {
         $data['user_backup_files_count'] = $user_backup_files_count;
 
         $this->load->view('users/users', $data);
+    }
+
+    public function users_register()
+    {
+        $data = array();
+
+        if ( ! check_perm('ADMIN'))
+        {
+            $this->load->redirect();
+            exit;
+        }
+
+        $data['users'] = User::find_all_by_active(false);
+
+        $this->load->view('users/users_register', $data);
     }
 
     public function user($user_id)
@@ -194,6 +214,55 @@ class Users_Controller extends Base_Controller {
         $this->user($user->id);
     }
 
+    public function register_data()
+    {
+        $username   = $this->load->post_value('username');
+        $email      = $this->load->post_value('email');
+        $password   = $this->load->post_value('password');
+        $password2  = $this->load->post_value('password2');
+
+        if ((isset($username)) && (isset($email)) && (isset($password)) && (isset($password2)))
+        {
+            if ((filter_var($email, FILTER_VALIDATE_EMAIL)) && ($password == $password2))
+            {
+                $user = new User();
+
+                $hash_options = [
+                    'cost' => 6,
+                ];
+
+                $user->username     = $username;
+                $user->email        = $email;
+                $user->password     = password_hash($password, PASSWORD_BCRYPT, $hash_options);
+                $user->max_size     = 50000;
+
+                try {
+                    if ($user->save())
+                    {
+                        $data = array(
+                            'register_status'   => TRUE,
+                            'url'               => DEFAULT_URL
+                        );
+
+                        echo json_encode($data);
+                        exit;
+                    }
+                }
+                catch (Exception $e)
+                {
+                }
+            }
+        }
+
+        $data = array(
+            'register_status'   => FALSE,
+            'url'               => DEFAULT_URL
+        );
+
+        echo json_encode($data);
+        exit;
+    }
+
     public function user_config_save($user_id = 0)
     {
         if (intval($user_id) > 0)
@@ -243,6 +312,39 @@ class Users_Controller extends Base_Controller {
         $this->user_config($user->id);
     }
 
+    public function user_accept($user_id)
+    {
+        $user = User::find_by_id($user_id);
+
+        if ($user)
+        {
+            if ( ! check_perm('ADMIN') )
+            {
+                $this->load->redirect();
+                exit;
+            }
+
+            if ($user->id == $this->auth->get_actual_user()->id)
+            {
+                $this->load->new_notification('No puedes aceptarte a ti mismo.', 'danger');
+            }
+            else
+            {
+                $user->active = TRUE;
+
+                if ($user->save())
+                {
+                    $this->load->new_notification('Los datos del usuario han sido actualizados correctamente.', 'success');
+                }
+                else
+                {
+                    $this->load->new_notification('No se han podido actualizar los datos.', 'danger');
+                }
+            }
+        }
+
+        $this->users();
+    }
     public function user_delete($user_id)
     {
         $user = User::find_by_id($user_id);

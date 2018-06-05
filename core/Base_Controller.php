@@ -42,7 +42,7 @@ class Base_Controller {
         $actual_uri = explode('/', $_SERVER['REQUEST_URI']);
         if (count($actual_uri)>2)
         {
-            return in_array('/'.$actual_uri[1].'/'.$actual_uri[2], config_public_urls);
+            return in_array('/'.strtolower($actual_uri[1]).'/'.($actual_uri[2]), config_public_urls);
         }
 
         return FALSE;

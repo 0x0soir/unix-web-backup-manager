@@ -20,7 +20,7 @@ class Auth {
 
         if (count($user_obj) > 0)
         {
-            if (password_verify($password, $user_obj->password))
+            if (($user_obj->active == TRUE) && (password_verify($password, $user_obj->password)))
             {
                 $this->loggin($user_obj);
                 return TRUE;

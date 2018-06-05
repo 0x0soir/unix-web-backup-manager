@@ -29,6 +29,12 @@ $admin_menu = array(
         'url' => '/Users/users',
         'icon' => 'users',
         'label' => 'Usuarios'
+    ),
+    array(
+        'id' => 'users_register',
+        'url' => '/Users/users_register',
+        'icon' => 'users',
+        'label' => 'Peticiones de registro'
     )
 );
 ?>

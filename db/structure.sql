@@ -9,12 +9,15 @@ CREATE TABLE users(
   password char(60),
   session char(60),
   last_login DATETIME,
+  active BOOL DEFAULT False NOT NULL,
   max_size bigint(20) DEFAULT '0',
   used_size bigint(20) DEFAULT '0',
   send_memory_mails BOOL DEFAULT True NOT NULL,
-  send_backup_done_mails BOOL DEFAULT True NOT NULL
+  send_backup_done_mails BOOL DEFAULT True NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT users_UN_username UNIQUE KEY (username),
+  CONSTRAINT users_UN_email UNIQUE KEY (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS user_logs;

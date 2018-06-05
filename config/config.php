@@ -6,6 +6,8 @@ require(BASE_PATH.'secrets.php');
 define('config_public_urls', array(
         '/users/index',
         '/users/login',
+        '/users/register',
+        '/users/register_data',
     )
 );
 
