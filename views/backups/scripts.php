@@ -19,7 +19,7 @@ $this->load->view('_/header', array(
                 </div>
             </div>
             <div class="card-block p-4">
-                <?php if (isset($backup_files) && (count($backup_files) > 0)): ?>
+                <?php if (isset($scripts) && (count($scripts) > 0)): ?>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>

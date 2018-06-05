@@ -70,7 +70,7 @@ class Backups_Controller extends Base_Controller {
 
         if ($backup)
         {
-            $this->cronjob($backup_id);
+            $this->cronjob($backup_id, TRUE);
         }
 
         $this->load->redirect("Backups/backup/".$backup_id);
@@ -214,7 +214,7 @@ class Backups_Controller extends Base_Controller {
         exit;
     }
 
-    public function cronjob($id)
+    public function cronjob($id, $manual_backup = FALSE)
     {
         $id = intval($id);
 
@@ -226,144 +226,150 @@ class Backups_Controller extends Base_Controller {
             // check if script exists
             if ($script)
             {
-                // check if can write destiny
-                if (($script->source_directory) && ($script->state == 0))
+                $start_time = strtotime($script->start_date->format('Y-m-d H:i:s'));
+                $end_time = strtotime($script->end_date->format('Y-m-d H:i:s'));
+
+                if (($manual_backup == TRUE) OR (($start_time <= time()) && (time() <= $end_time)))
                 {
-                    $source_directory = realpath(trim($script->source_directory));
-                    $excluded_extensions = explode(" ", $script->excluded_extensions);
-                    $excluded_extensions = array_map('strtolower', $excluded_extensions);
-                    $excluded_directories = explode(" ", $script->excluded_directories);
-                    $excluded_directories = array_map('strtolower', $excluded_directories);
-
-                    if (is_dir($source_directory) && is_readable($source_directory) && is_dir(DIRECTORY_TARGET_BACKUPS) && is_writable(DIRECTORY_TARGET_BACKUPS))
+                    // check if can write destiny
+                    if (($script->source_directory) && ($script->state == 0))
                     {
-                        $path = realpath($source_directory);
+                        $source_directory = realpath(trim($script->source_directory));
+                        $excluded_extensions = explode(" ", $script->excluded_extensions);
+                        $excluded_extensions = array_map('strtolower', $excluded_extensions);
+                        $excluded_directories = explode(" ", $script->excluded_directories);
+                        $excluded_directories = array_map('strtolower', $excluded_directories);
 
-                        $innerIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
-                            $path,
-                            RecursiveDirectoryIterator::SKIP_DOTS
-                        ));
+                        if (is_dir($source_directory) && is_readable($source_directory) && is_dir(DIRECTORY_TARGET_BACKUPS) && is_writable(DIRECTORY_TARGET_BACKUPS))
+                        {
+                            $path = realpath($source_directory);
 
-                        // do backup
-                        if (!file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id)) {
-                            mkdir(DIRECTORY_TARGET_BACKUPS.'/'.$script->id, 0777, true);
-                        }
+                            $innerIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
+                                $path,
+                                RecursiveDirectoryIterator::SKIP_DOTS
+                            ));
 
-                        $target_file = md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time());
-                        $target_compress_data = new PharData(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
+                            // do backup
+                            if (!file_exists(DIRECTORY_TARGET_BACKUPS.'/'.$script->id)) {
+                                mkdir(DIRECTORY_TARGET_BACKUPS.'/'.$script->id, 0777, true);
+                            }
 
-                        try {
-                            foreach ($innerIterator as $directory)
-                            {
-                                if ($directory->isFile())
+                            $target_file = md5($script->source_directory).'_'.date('d_m_Y_H_i_s', time());
+                            $target_compress_data = new PharData(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
+
+                            try {
+                                foreach ($innerIterator as $directory)
                                 {
-                                    if (count($excluded_directories) > 1)
+                                    if ($directory->isFile())
                                     {
-                                        $dir_parts = explode($source_directory, $directory->getPath());
-                                        $dir_parts = explode("/", $dir_parts[1]);
-                                        $dir_parts = array_map('strtolower', $dir_parts);
-
-                                        if (count(array_diff($dir_parts, $excluded_directories)) != count($dir_parts))
+                                        if (count($excluded_directories) > 1)
                                         {
-                                            continue;
+                                            $dir_parts = explode($source_directory, $directory->getPath());
+                                            $dir_parts = explode("/", $dir_parts[1]);
+                                            $dir_parts = array_map('strtolower', $dir_parts);
+
+                                            if (count(array_diff($dir_parts, $excluded_directories)) != count($dir_parts))
+                                            {
+                                                continue;
+                                            }
                                         }
-                                    }
-                                    // --> ignore extensions
-                                    if ( ! in_array(strtolower($directory->getExtension()), $excluded_extensions))
-                                    {
-                                        $target_compress_data->addFile($directory);
-                                    }
+                                        // --> ignore extensions
+                                        if ( ! in_array(strtolower($directory->getExtension()), $excluded_extensions))
+                                        {
+                                            $target_compress_data->addFile($directory);
+                                        }
 
+                                    }
                                 }
-                            }
 
-                            $user = User::find_by_id($script->user_id);
+                                $user = User::find_by_id($script->user_id);
 
-                            if ($script->type == 0)
-                            {
-                                $files = array('.tar');
-                            }
-                            else if ($script->type == 1)
-                            {
-                                $files = array('.tar.gz');
-
-                                // save backup tar gz
-                                $target_compress_data->compress(Phar::GZ);
-
-                                unlink(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
-                            }
-                            else if ($script->type == 2)
-                            {
-                                $files = array('.tar', '.tar.gz');
-
-                                // save backup tar gz
-                                $target_compress_data->compress(Phar::GZ);
-                            }
-
-                            $files_done = array();
-
-                            foreach ($files as $file)
-                            {
-                                $file_url = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.$file;
-
-                                if (file_exists($file_url))
+                                if ($script->type == 0)
                                 {
-                                    if (check_available_space($user, filesize($file_url)))
-                                    {
-                                        BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file.$file);
-                                        $backup_tar_file = BackupFile::new_file($script->id, $target_file.$file, $file, filesize($file_url));
+                                    $files = array('.tar');
+                                }
+                                else if ($script->type == 1)
+                                {
+                                    $files = array('.tar.gz');
 
-                                        $user->used_size = $user->used_size + filesize($file_url);
-                                        $user->save();
+                                    // save backup tar gz
+                                    $target_compress_data->compress(Phar::GZ);
 
-                                        $files_done[] = array(
-                                            'extension'     => $file,
-                                            'directory'     => $source_directory,
-                                            'size'          => filesize($file_url),
-                                            'link'          => $backup_tar_file->download_link()
-                                        );
-                                    }
-                                    else
+                                    unlink(DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.'.tar');
+                                }
+                                else if ($script->type == 2)
+                                {
+                                    $files = array('.tar', '.tar.gz');
+
+                                    // save backup tar gz
+                                    $target_compress_data->compress(Phar::GZ);
+                                }
+
+                                $files_done = array();
+
+                                foreach ($files as $file)
+                                {
+                                    $file_url = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$target_file.$file;
+
+                                    if (file_exists($file_url))
                                     {
-                                        if ($user->send_backup_done_mails == TRUE)
+                                        if (check_available_space($user, filesize($file_url)))
+                                        {
+                                            BackupLog::new_log($script->id, 'Copia de seguridad generada '.$target_file.$file);
+                                            $backup_tar_file = BackupFile::new_file($script->id, $target_file.$file, $file, filesize($file_url));
+
+                                            $user->used_size = $user->used_size + filesize($file_url);
+                                            $user->save();
+
+                                            $files_done[] = array(
+                                                'extension'     => $file,
+                                                'directory'     => $source_directory,
+                                                'size'          => filesize($file_url),
+                                                'link'          => $backup_tar_file->download_link()
+                                            );
+                                        }
+                                        else
                                         {
                                             if ($user->send_backup_done_mails == TRUE)
                                             {
-                                                $this->_send_space_error_message($user, $script);
+                                                if ($user->send_backup_done_mails == TRUE)
+                                                {
+                                                    $this->_send_space_error_message($user, $script);
+                                                }
                                             }
+                                            unset($file_url);
                                         }
-                                        unset($file_url);
+                                    }
+                                    else
+                                    {
+                                        BackupLog::new_log($script->id, 'No se ha podido generar la copia '.$target_file.$file);
                                     }
                                 }
-                                else
+
+                                if (count($files_done) > 0)
                                 {
-                                    BackupLog::new_log($script->id, 'No se ha podido generar la copia '.$target_file.$file);
+                                    $mail_data = array(
+                                        'files'         => $files_done,
+                                        'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
+                                    );
+
+                                    $html_mail = $this->load->view('email/backup', $mail_data, TRUE);
+
+                                    if ($user->send_backup_done_mails == TRUE)
+                                    {
+                                        $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:s'), $html_mail);
+                                    }
                                 }
                             }
-
-                            if (count($files_done) > 0)
+                            catch (Exception $e)
                             {
-                                $mail_data = array(
-                                    'files'         => $files_done,
-                                    'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
-                                );
-
-                                $html_mail = $this->load->view('email/backup', $mail_data, TRUE);
-
-                                if ($user->send_backup_done_mails == TRUE)
-                                {
-                                    $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:s'), $html_mail);
-                                }
+                                echo "error";
                             }
                         }
-                        catch (Exception $e)
+                        else
                         {
                             echo "error";
                         }
-                    }
-                    else
-                    {
-                        echo "error";
                     }
                 }
             }
