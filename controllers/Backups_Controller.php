@@ -325,7 +325,13 @@ class Backups_Controller extends Base_Controller {
                                     }
                                     else
                                     {
-                                        $this->_send_space_error_message($user, $script);
+                                        if ($user->send_backup_done_mails == TRUE)
+                                        {
+                                            if ($user->send_backup_done_mails == TRUE)
+                                            {
+                                                $this->_send_space_error_message($user, $script);
+                                            }
+                                        }
                                         unset($file_url);
                                     }
                                 }
@@ -343,7 +349,11 @@ class Backups_Controller extends Base_Controller {
                                 );
 
                                 $html_mail = $this->load->view('email/backup', $mail_data, TRUE);
-                                $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:s'), $html_mail);
+
+                                if ($user->send_backup_done_mails == TRUE)
+                                {
+                                    $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:s'), $html_mail);
+                                }
                             }
                         }
                         catch (Exception $e)

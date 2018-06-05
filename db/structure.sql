@@ -11,6 +11,8 @@ CREATE TABLE users(
   last_login DATETIME,
   max_size bigint(20) DEFAULT '0',
   used_size bigint(20) DEFAULT '0',
+  send_memory_mails BOOL DEFAULT True NOT NULL,
+  send_backup_done_mails BOOL DEFAULT True NOT NULL
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

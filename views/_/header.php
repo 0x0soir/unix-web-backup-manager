@@ -19,6 +19,9 @@
 
         <!-- Custom -->
         <link href="/assets/css/style.admin.css" rel="stylesheet">
+
+        <!-- External -->
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     </head>
 
     <?php if ( ! isset($NOT_INCLUDES) ): ?>
