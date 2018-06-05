@@ -34,6 +34,24 @@ class Backups_Controller extends Base_Controller {
         $this->load->view('backups/backups', $data);
     }
 
+    public function all_backups()
+    {
+        $scripts = Backup::find('all');
+
+        $backup_files = array();
+
+        if (count($scripts) > 0)
+        {
+            foreach ($scripts as $script) {
+                $backup_files = $backup_files + BackupFile::find_all_by_backup_id($script->id);
+            }
+        }
+
+        $data['backup_files'] = $backup_files;
+
+        $this->load->view('backups/all_backups', $data);
+    }
+
     public function scripts()
     {
         $data = array();
@@ -41,6 +59,15 @@ class Backups_Controller extends Base_Controller {
         $data['scripts'] = Backup::find_all_by_user_id($this->auth->get_actual_user()->id);
 
         $this->load->view('backups/scripts', $data);
+    }
+
+    public function all_scripts()
+    {
+        $data = array();
+
+        $data['scripts'] = Backup::find('all');
+
+        $this->load->view('backups/all_scripts', $data);
     }
 
     public function backup($backup_id)
@@ -503,8 +530,6 @@ class Backups_Controller extends Base_Controller {
     private function _get_directory_iterator_to_array(DirectoryIterator $iterator)
     {
         $result = array();
-
-        sleep(2);
 
         foreach ($iterator as $key => $directory) {
             if ($directory->isDot()) {

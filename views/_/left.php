@@ -35,6 +35,18 @@ $admin_menu = array(
         'url' => '/Users/users_register',
         'icon' => 'users',
         'label' => 'Peticiones de registro'
+    ),
+    array(
+        'id' => 'backups_all_backups',
+        'url' => '/Backups/all_backups',
+        'icon' => 'layers',
+        'label' => 'Todas las copias'
+    ),
+    array(
+        'id' => 'backups_all_scripts',
+        'url' => '/Backups/all_scripts',
+        'icon' => 'clock',
+        'label' => 'Todos los scripts'
     )
 );
 ?>
