@@ -44,19 +44,30 @@ $this->load->view('_/header', array(
                             <input class="form-control" type="text" value="<?= $user_info->created_at ?>" name="reg_date" disabled>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-2 col-form-label">Tamaño máximo permitido</label>
-                        <div class="col-10">
-                            <input class="form-control" type="text" value="<?= $user_info->max_size ?>" name="max_size">
-                            <small class="form-text text-muted">Expresado en bytes, es el tamaño máximo que podrá usar el usuario al generar copias.</small>
+                    <?php if (check_perm('ADMIN')): ?>
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Tamaño máximo permitido</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" value="<?= $user_info->max_size ?>" name="max_size">
+                                <small class="form-text text-muted">Expresado en bytes, es el tamaño máximo que podrá usar el usuario al generar copias.</small>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Tamaño ocupado</label>
                         <div class="col-10">
                             <input class="form-control" type="text" value="<?= $user_info->used_size ?>" name="used_size" disabled>
                         </div>
                     </div>
+                    <?php if (check_perm('ADMIN')): ?>
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Directorio raiz</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" value="<?= $user_info->root_path ?>" name="root_path">
+                                <small class="form-text text-muted">Ruta absoluta del directorio raiz sobre el que el usuario puede hacer copias.</small>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Última edición</label>
                         <div class="col-10">

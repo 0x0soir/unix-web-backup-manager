@@ -187,13 +187,23 @@ class Users_Controller extends Base_Controller {
             $new_username   = $this->load->post_value('username');
             $new_email      = $this->load->post_value('email');
             $new_password   = $this->load->post_value('password');
-            $new_max_size   = $this->load->post_value('max_size');
+
+            if (check_perm('ADMIN'))
+            {
+                $new_max_size   = $this->load->post_value('max_size');
+                $new_root_path  = $this->load->post_value('root_path');
+            }
 
             if (isset($new_username) && isset($new_email) && isset($new_max_size))
             {
                 $user->username = $new_username;
                 $user->email = $new_email;
-                $user->max_size = $new_max_size;
+
+                if (check_perm('ADMIN'))
+                {
+                    $user->max_size     = $new_max_size;
+                    $user->root_path    = $new_root_path;
+                }
             }
 
             if (isset($new_password) && ( ! empty($new_password)) )
