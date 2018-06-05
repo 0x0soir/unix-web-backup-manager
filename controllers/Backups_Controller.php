@@ -392,20 +392,12 @@ class Backups_Controller extends Base_Controller {
                                 }
                                 catch (Exception $e)
                                 {
-                                    echo "error";
                                 }
-                            }
-                            else
-                            {
-                                echo "error";
                             }
                         }
                     }
                 }
             }
-
-            // generate rsa protection
-            // send email with key to user
         }
     }
 
