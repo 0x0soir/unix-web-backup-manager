@@ -25,8 +25,8 @@ $this->load->view('_/header', array(
                                 <th>Usuario</th>
                                 <th>Correo</th>
                                 <th>Última conexión</th>
-                                <th class="text-center"><span data-feather="file"></span> Backups realizados</th>
-                                <th class="text-center"><span data-feather="command"></span> Backups programados</th>
+                                <th class="text-center"><span data-feather="file"></span> Backups programados</th>
+                                <th class="text-center"><span data-feather="command"></span> Backups realizados</th>
                                 <th class="text-right">Opciones</th>
                             </tr>
                         </thead>

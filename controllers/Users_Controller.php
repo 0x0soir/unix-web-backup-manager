@@ -274,4 +274,93 @@ class Users_Controller extends Base_Controller {
 
         $this->users();
     }
+
+    public function user_delete_backups($user_id, $redirect = TRUE)
+    {
+        if ($user_id)
+        {
+            $user = User::find_by_id($user_id, array(
+                    'include' => array('backups' => array('backup_files'))
+                )
+            );
+
+            if ($user)
+            {
+                if ( ! check_perm('ADMIN') )
+                {
+                    $this->load->redirect();
+                    exit;
+                }
+
+                foreach($user->backups as $script)
+                {
+                    foreach($script->backup_files as $backup_file)
+                    {
+                        $backup_real_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
+
+                        if (file_exists($backup_real_file)) {
+                            $user->used_size = $user->used_size - filesize($backup_real_file);
+                            if ($user->save())
+                            {
+                                if ($backup_file->delete())
+                                {
+                                    unlink($backup_real_file);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($redirect)
+        {
+            $this->load->redirect('Users/users');
+        }
+    }
+
+    public function user_delete_scripts($user_id, $redirect = TRUE)
+    {
+        if ($user_id)
+        {
+            $user = User::find_by_id($user_id, array(
+                    'include' => array('backups' => array('backup_files'))
+                )
+            );
+
+            if ($user)
+            {
+                if ( ! check_perm('ADMIN') )
+                {
+                    $this->load->redirect();
+                    exit;
+                }
+
+                foreach($user->backups as $script)
+                {
+                    foreach($script->backup_files as $backup_file)
+                    {
+                        $backup_real_file = DIRECTORY_TARGET_BACKUPS.'/'.$script->id.'/'.$backup_file->url;
+
+                        if (file_exists($backup_real_file)) {
+                            $user->used_size = $user->used_size - filesize($backup_real_file);
+                            if ($user->save())
+                            {
+                                if ($backup_file->delete())
+                                {
+                                    unlink($backup_real_file);
+                                }
+                            }
+                        }
+                    }
+                    $script->delete();
+                }
+            }
+        }
+
+        if ($redirect)
+        {
+            $this->load->redirect('Users/users');
+        }
+    }
 }

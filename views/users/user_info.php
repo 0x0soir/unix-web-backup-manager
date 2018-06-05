@@ -72,7 +72,12 @@ $this->load->view('_/header', array(
                         </div>
                     </div>
                     <button type="submit" class="btn btn-sm btn-success">Actualizar</button>
-                    <a href="/Users/user_delete/<?= $user_info->id ?>" class="btn btn-sm btn-danger">Eliminar</a>
+                    <?php if (check_perm('ADMIN')): ?>
+                        <hr>
+                        <a href="/Users/user_delete_scripts/<?= $user_info->id ?>" class="btn btn-sm btn-warning">Eliminar scripts programados</a>
+                        <a href="/Users/user_delete_backups/<?= $user_info->id ?>" class="btn btn-sm btn-warning">Eliminar copias generadas</a>
+                        <a href="/Users/user_delete/<?= $user_info->id ?>" class="btn btn-sm btn-danger">Eliminar usuario</a>
+                    <?php endif; ?>
                 </form>
             </div>
         </div>
