@@ -45,6 +45,9 @@
     $(document).on('click', '#new_select_directory_close', function(e){
         $('.new_select_directory').modal('hide');
         $('.new_backup_modal').modal('show');
+        $('body').addClass('modal-open');
+
+        setTimeout(function(){ $('body').addClass('modal-open'); }, 600);
     });
 
     $(document).on('click', '#new_select_directory_use', function(e){
@@ -52,6 +55,8 @@
 
         $('.new_select_directory').modal('hide');
         $('.new_backup_modal').modal('show');
+
+        setTimeout(function(){ $('body').addClass('modal-open'); }, 600);
     });
 
     $(document).on('click', '[name=source_directory]', function(e) {
