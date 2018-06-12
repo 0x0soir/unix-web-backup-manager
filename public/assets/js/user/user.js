@@ -4,9 +4,12 @@
         var url = "/users/login";
         event.preventDefault();
 
-        $('#login_form').fadeOut('slow', function(){
-            $('#login_form').siblings('.loader').fadeIn();
-        });
+
+        setTimeout(function(){
+            $('#login_form').fadeOut('slow', function(){
+                $('#login_form').siblings('.loader').fadeIn();
+            });
+        }, 200);
 
         $.ajax({
             type: "POST",

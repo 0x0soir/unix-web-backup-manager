@@ -290,6 +290,7 @@ class Users_Controller extends Base_Controller {
         {
             $new_notification_memory        = $this->load->post_value('memory');
             $new_notification_new_backup    = $this->load->post_value('new_backup');
+            $new_rgpd_check                 = $this->load->post_value('rgpd-check');
 
             if (( $new_notification_memory == NULL) OR ($new_notification_memory != "on"))
             {
@@ -307,6 +308,15 @@ class Users_Controller extends Base_Controller {
             else
             {
                 $user->send_backup_done_mails = TRUE;
+            }
+
+            if (( $new_rgpd_check == NULL) OR ($new_rgpd_check != TRUE))
+            {
+                $user->rgpd_status = FALSE;
+            }
+            else
+            {
+                $user->rgpd_status = TRUE;
             }
 
             if ($user->save())

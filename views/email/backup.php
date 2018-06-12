@@ -71,6 +71,7 @@
                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                 <td class="aligncenter content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 11px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
                                     <p>© <?= date('Y') ?>, Jorge Parrilla</p>
+                                    <p>Puedes cambiar tus preferencias de suscripción <a href="<?= WEBSITE_HOST ?>Users/user_config/<?= $user_id ?>">aquí</a>.</p>
                                 </td>
                             </tr>
                         </table>

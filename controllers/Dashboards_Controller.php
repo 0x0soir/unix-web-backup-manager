@@ -32,6 +32,11 @@ class Dashboards_Controller extends Base_Controller {
         $this->load->view('dashboards/index', $data);
     }
 
+    public function rgpd()
+    {
+        $this->load->view('dashboards/rgpd', array());
+    }
+
     public function login()
     {
         $this->load->view('login', array());
@@ -49,7 +54,7 @@ class Dashboards_Controller extends Base_Controller {
         }
 
         $dateArray = array_reverse($dateArray);
-
+        $total_used = 0;
         $used_sizes = array();
         $backups_count = array();
 
@@ -60,6 +65,7 @@ class Dashboards_Controller extends Base_Controller {
             foreach ($backups as $file)
             {
                 $day_size += $file->size;
+                $total_used += $day_size;
             }
 
             array_push($used_sizes, $day_size);
@@ -69,7 +75,8 @@ class Dashboards_Controller extends Base_Controller {
         return array(
             'dates' => $dateArray,
             'used_sizes' => $used_sizes,
-            'backups' => $backups_count
+            'backups' => $backups_count,
+            'total_used' => $total_used
         );
     }
 }

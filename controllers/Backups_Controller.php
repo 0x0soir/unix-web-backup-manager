@@ -359,12 +359,9 @@ class Backups_Controller extends Base_Controller {
                                             }
                                             else
                                             {
-                                                if ($user->send_backup_done_mails == TRUE)
+                                                if (($user->send_backup_done_mails == TRUE) && ($user->rgpd_status == TRUE))
                                                 {
-                                                    if ($user->send_backup_done_mails == TRUE)
-                                                    {
-                                                        $this->_send_space_error_message($user, $script);
-                                                    }
+                                                    $this->_send_space_error_message($user, $script);
                                                 }
                                                 unset($file_url);
                                             }
@@ -379,12 +376,13 @@ class Backups_Controller extends Base_Controller {
                                     {
                                         $mail_data = array(
                                             'files'         => $files_done,
-                                            'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
+                                            'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id,
+                                            'user_id'       => $script->user_id
                                         );
 
                                         $html_mail = $this->load->view('email/backup', $mail_data, TRUE);
 
-                                        if ($user->send_backup_done_mails == TRUE)
+                                        if (($user->send_backup_done_mails == TRUE) && ($user->rgpd_status == TRUE))
                                         {
                                             $this->send_mail($user->email, 'Nueva copia realizada '.date('d/m/Y H:i:s'), $html_mail);
                                         }
@@ -553,7 +551,8 @@ class Backups_Controller extends Base_Controller {
         BackupLog::new_log($script->id, 'Error: No tienes espacio suficiente para almacenar esta copia.');
 
         $mail_data = array(
-            'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id
+            'admin_link'    => WEBSITE_HOST.'Backups/backup/'.$script->id,
+            'user_id'       => $script->user_id
         );
 
         $html_mail = $this->load->view('email/backup_no_space', $mail_data, TRUE);

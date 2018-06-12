@@ -35,6 +35,7 @@ class Base_Controller {
             $this->load->redirect('users/index');
         }
         $this->check_operating_system();
+        $this->check_rgpd_accepted();
     }
 
     private function _check_public_url()
@@ -67,6 +68,30 @@ class Base_Controller {
             {
                 return TRUE;
             }
+        }
+    }
+
+    public function check_rgpd_accepted()
+    {
+        $actual_uri = explode('/', $_SERVER['REQUEST_URI']);
+        if (
+            ($this->auth->is_logged())
+            && (get_actual_user())
+            && (get_actual_user()->rgpd_status == 0)
+            && (
+                ( ! isset($actual_uri[2]))
+                ||
+                (
+                    ($actual_uri[2] != 'user_config')
+                    &&
+                    ($actual_uri[2] != 'user_config_save')
+                    &&
+                    ($actual_uri[2] != 'rgpd')
+                )
+            )
+        )
+        {
+            $this->load->redirect('users/user_config/'.get_actual_user()->id);
         }
     }
 

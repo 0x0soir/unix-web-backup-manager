@@ -71,8 +71,8 @@ $this->load->view('_/header', array(
                 <h3 class="pull-left">Estadísticas</h3>
             </div>
             <div class="card-body">
-                <div id="main1" style="width: 100%;height:400px; <?= ( ! isset($chart_last_days)) ? 'display:flex;align-items:center;justify-content: center;' : '' ?>">
-                    <?php if ( ! isset($chart_last_days)): ?>
+                <div id="main1" style="width: 100%;height:400px; <?= ( ! isset($chart_last_days) OR ((isset($chart_last_days) AND ($chart_last_days['total_used'] == 0)))) ? 'display:flex;align-items:center;justify-content: center;' : '' ?>">
+                    <?php if ( ! isset($chart_last_days) OR ((isset($chart_last_days) AND ($chart_last_days['total_used'] == 0)))): ?>
                         <h2 class="text-center">No existen datos históricos</h2>
                     <?php endif; ?>
                 </div>
@@ -80,7 +80,7 @@ $this->load->view('_/header', array(
         </div>
     </div>
 </div>
-<?php if (isset($chart_last_days)): ?>
+<?php if (isset($chart_last_days) AND ($chart_last_days['total_used'] > 0)): ?>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function(event) {
             {

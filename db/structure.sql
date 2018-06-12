@@ -15,6 +15,7 @@ CREATE TABLE users(
   send_memory_mails BOOL DEFAULT True NOT NULL,
   send_backup_done_mails BOOL DEFAULT True NOT NULL,
   root_path varchar(250) NULL,
+  rgpd_status BOOL DEFAULT False NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT users_UN_username UNIQUE KEY (username),

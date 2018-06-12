@@ -16,7 +16,7 @@ $this->load->view('_/header', array('NOT_INCLUDES' => TRUE));
                             <div class="card-body">
                                 <div class="loader" style="display: none;"></div>
                                 <form method="POST" action="/Backups/download_backup/<?= $backup_id ?>/<?= $backup_file_id ?>" class="needs-validation" novalidate="" name="download">
-                                    <?php if (isset($error_message)): ?>
+                                    <?php if (isset($error_message) && (strlen($error_message) > 0)): ?>
                                         <div class="alert alert-danger" role="alert">
                                             <?= $error_message ?>
                                         </div>

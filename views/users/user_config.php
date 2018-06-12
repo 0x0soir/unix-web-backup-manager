@@ -33,6 +33,11 @@ $this->load->view('_/header', array(
                         </div>
                     </div>
                     <hr/>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="rgpd-check" name="rgpd-check" <?= $user_info->rgpd_status == TRUE ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="rgpd-check">Acepto recibir comunicaciones según lo establecido en la <a href="<?= WEBSITE_HOST ?>dashboards/rgpd" target="_blank">política de privacidad</a></label>
+                    </div>
+                    <hr />
                     <button type="submit" class="btn btn-sm btn-success">Actualizar</button>
                 </form>
             </div>
