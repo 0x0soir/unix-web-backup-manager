@@ -9,8 +9,8 @@ class Base_Controller {
         load_class('Exception', 'core/lib/PHPMailer', TRUE);
         load_class('SMTP', 'core/lib/PHPMailer', TRUE);
         load_class('PHPMailer', 'core/lib/PHPMailer', TRUE);
-        load_active_record();
         load_config();
+        load_active_record();
 
         $this->load = load_class('Loader', 'core');
         $this->auth = load_class('Auth', 'core');

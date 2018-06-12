@@ -25,6 +25,6 @@ function load_active_record()
     ActiveRecord\Config::initialize(function($cfg)
     {
         $cfg->set_model_directory('../models');
-        $cfg->set_connections(array('development' => 'mysql://root:root@localhost/tfg_admin'));
+        $cfg->set_connections(array('development' => 'mysql://'.MYSQL_USER.':'.MYSQL_PASSWORD.'@'.MYSQL_HOST.'/'.MYSQL_DATABASE.''));
     });
 }
