@@ -10,10 +10,10 @@
 - Asignación de contraseñas de descarga a las copias.
 - Envío de correos electrónicos con enlaces de descarga al realizar copias.
 
-###Librerías utilizadas
+### Librerías utilizadas
 https://github.com/jpfuentes2/php-activerecord
 https://www.malot.fr/bootstrap-datetimepicker/index.php
 http://www.bootstraptoggle.com/
 
-###Pantalla de bienvenida
-![](https://github.com/0x0soir/TFG_Backups/_images/welcome_page.png)
+### Pantalla de bienvenida
+![TFG Admin](/_images/welcome_page.png)
