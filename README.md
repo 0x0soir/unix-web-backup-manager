@@ -1,5 +1,5 @@
 # TFG Backups
-###Features
+### Features
 
 - Programación de copias automáticas.
 - Gestión de usuarios de la aplicación.
@@ -11,9 +11,9 @@
 - Envío de correos electrónicos con enlaces de descarga al realizar copias.
 
 ### Librerías utilizadas
-https://github.com/jpfuentes2/php-activerecord
-https://www.malot.fr/bootstrap-datetimepicker/index.php
-http://www.bootstraptoggle.com/
+- https://github.com/jpfuentes2/php-activerecord
+- https://www.malot.fr/bootstrap-datetimepicker/index.php
+- http://www.bootstraptoggle.com/
 
 ### Pantalla de bienvenida
 ![TFG Admin](/_images/welcome_page.png)
