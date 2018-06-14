@@ -1,59 +1,7 @@
-<?php
-$menu = array(
-    array(
-        'id' => 'dashboards_index',
-        'url' => '/Dashboards/index',
-        'icon' => 'home',
-        'label' => 'Inicio'
-    )
-);
-
-$backups_menu = array(
-    array(
-        'id' => 'backups_backups',
-        'url' => '/Backups/backups',
-        'icon' => 'layers',
-        'label' => 'Realizados'
-    ),
-    array(
-        'id' => 'backups_scripts',
-        'url' => '/Backups/scripts',
-        'icon' => 'clock',
-        'label' => 'Programados'
-    )
-);
-
-$admin_menu = array(
-    array(
-        'id' => 'users_users',
-        'url' => '/Users/users',
-        'icon' => 'users',
-        'label' => 'Usuarios'
-    ),
-    array(
-        'id' => 'users_register',
-        'url' => '/Users/users_register',
-        'icon' => 'users',
-        'label' => 'Peticiones de registro'
-    ),
-    array(
-        'id' => 'backups_all_backups',
-        'url' => '/Backups/all_backups',
-        'icon' => 'layers',
-        'label' => 'Todas las copias'
-    ),
-    array(
-        'id' => 'backups_all_scripts',
-        'url' => '/Backups/all_scripts',
-        'icon' => 'clock',
-        'label' => 'Todos los scripts'
-    )
-);
-?>
-<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+<nav class="col-lg-2 col-md-3 d-none d-md-block bg-light sidebar">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
-            <?php foreach ($menu as $menu_item): ?>
+            <?php foreach (get_menu_items()['base_menu'] as $menu_item): ?>
                 <li class="nav-item">
                     <a class="nav-link <?= ! empty($menu_active) && $menu_active == $menu_item['id'] ? 'active' : '' ?>" href="<?= $menu_item['url'] ?>">
                         <span data-feather="<?= $menu_item['icon'] ?>"></span>
@@ -66,7 +14,7 @@ $admin_menu = array(
             <span>Backups</span>
         </h6>
         <ul class="nav flex-column">
-            <?php foreach ($backups_menu as $menu_item): ?>
+            <?php foreach (get_menu_items()['backups_menu'] as $menu_item): ?>
                 <li class="nav-item">
                     <a class="nav-link <?= ! empty($menu_active) && $menu_active == $menu_item['id'] ? 'active' : '' ?>" href="<?= $menu_item['url'] ?>">
                         <span data-feather="<?= $menu_item['icon'] ?>"></span>
@@ -80,7 +28,7 @@ $admin_menu = array(
                 <span>Administración</span>
             </h6>
             <ul class="nav flex-column mb-2">
-                <?php foreach ($admin_menu as $menu_item): ?>
+                <?php foreach (get_menu_items()['admin_menu'] as $menu_item): ?>
                     <li class="nav-item">
                         <a class="nav-link <?= ! empty($menu_active) && $menu_active == $menu_item['id'] ? 'active' : '' ?>" href="<?= $menu_item['url'] ?>">
                             <span data-feather="<?= $menu_item['icon'] ?>"></span>

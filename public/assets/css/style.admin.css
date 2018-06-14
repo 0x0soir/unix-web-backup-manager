@@ -413,3 +413,17 @@ a, a:hover {
     height: 2rem;
     font-size: 1.3rem;
 }
+
+.dropdown-toggle
+{
+    color: #fff;
+    margin:5px;
+}
+
+/* DESKTOP SCREEN */
+@media (min-width: 767px) {
+    .dropdown-menu
+    {
+        margin-left: -100px;
+    }
+}

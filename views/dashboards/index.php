@@ -4,7 +4,7 @@ $this->load->view('_/header', array(
 ));
 ?>
 <div class="row">
-    <div class="col-3">
+    <div class="col-sm-12 col-md-6 col-lg-3">
         <div class="card text-white bg-info">
             <div class="card-body">
                 <h5 class="card-title text-center"><span data-feather="database"></span> Espacio máximo</h5>
@@ -14,7 +14,7 @@ $this->load->view('_/header', array(
             </div>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-sm-12 col-md-6 col-lg-3">
         <div class="card text-white bg-info">
             <div class="card-body">
                 <h5 class="card-title text-center"><span data-feather="copy"></span> Espacio usado</h5>
@@ -24,7 +24,7 @@ $this->load->view('_/header', array(
             </div>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-sm-12 col-md-6 col-lg-3">
         <div class="card text-white bg-info">
             <div class="card-body">
                 <h5 class="card-title text-center"><span data-feather="database"></span> Backups programados</h5>
@@ -34,7 +34,7 @@ $this->load->view('_/header', array(
             </div>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-sm-12 col-md-6 col-lg-3">
         <div class="card text-white bg-info">
             <div class="card-body">
                 <h5 class="card-title text-center"><span data-feather="clock"></span> Backups realizados</h5>
@@ -151,6 +151,10 @@ $this->load->view('_/header', array(
                     ]
                 };
                 myChart1.setOption(option1);
+
+                window.onresize = function() {
+                    myChart1.resize();
+                };
             }
         });
     </script>

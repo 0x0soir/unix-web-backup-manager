@@ -106,3 +106,65 @@ function check_available_space($user, $needed)
         return TRUE;
     }
 }
+
+function get_menu_items()
+{
+    $menu = array(
+        array(
+            'id' => 'dashboards_index',
+            'url' => '/Dashboards/index',
+            'icon' => 'home',
+            'label' => 'Inicio'
+        )
+    );
+
+    $backups_menu = array(
+        array(
+            'id' => 'backups_backups',
+            'url' => '/Backups/backups',
+            'icon' => 'layers',
+            'label' => 'Realizados'
+        ),
+        array(
+            'id' => 'backups_scripts',
+            'url' => '/Backups/scripts',
+            'icon' => 'clock',
+            'label' => 'Programados'
+        )
+    );
+
+    $admin_menu = array(
+        array(
+            'id' => 'users_users',
+            'url' => '/Users/users',
+            'icon' => 'users',
+            'label' => 'Usuarios'
+        ),
+        array(
+            'id' => 'users_register',
+            'url' => '/Users/users_register',
+            'icon' => 'users',
+            'label' => 'Peticiones de registro'
+        ),
+        array(
+            'id' => 'backups_all_backups',
+            'url' => '/Backups/all_backups',
+            'icon' => 'layers',
+            'label' => 'Todas las copias'
+        ),
+        array(
+            'id' => 'backups_all_scripts',
+            'url' => '/Backups/all_scripts',
+            'icon' => 'clock',
+            'label' => 'Todos los scripts'
+        )
+    );
+
+    $menus = array(
+        'base_menu' => $menu,
+        'backups_menu' => $backups_menu,
+        'admin_menu' => $admin_menu
+    );
+
+    return $menus;
+}

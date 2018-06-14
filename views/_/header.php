@@ -30,5 +30,5 @@
                 <?php $this->load->view('_/bar'); ?>
                 <div class="container-fluid">
                     <?php $this->load->view('_/left', array('menu_active' => $menu_active)); ?>
-                    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                    <main role="main" class="col-lg-10 col-md-9 ml-sm-auto pt-3 px-4">
     <?php endif; ?>
